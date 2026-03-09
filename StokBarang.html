@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hunny Pet Care</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f7f6; }
+        header { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        nav { background: #34495e; padding: 0.5rem 2rem; }
+        nav a { color: white; text-decoration: none; margin-right: 20px; font-weight: bold; }
+        .container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; padding: 20px; }
+        section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { border-bottom: 2px solid #27ae60; padding-bottom: 10px; color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px; }
+        th { background-color: #27ae60; color: white; }
+        
+        .btn-edit { background: #f39c12; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
+        .btn-hapus { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        
+        aside { background: #ecf0f1; padding: 20px; border-radius: 8px; }
+        .stat-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #27ae60; }
+        footer { background: #2c3e50; color: white; text-align: center; padding: 1rem; margin-top: 20px; }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div style="display: flex; align-items: center;">
+            <img src="logohunny.webp" alt="Logo" width="60" height="60">
+            <h1 style="margin-left: 15px;">Hunny Pet Care</h1>
+        </div>
+    </header>
+
+    <nav>
+        <a href="Inventaris.html">Inventaris</a>
+        <a href="Reservasi.html">Reservasi</a>
+        <a href="StokBarang.html">Stok Barang</a>
+    </nav>
+    <div class="container">
+        <main>
+            <section>
+                <h2>Daftar Stok Barang</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tgl Masuk</th> <th>Kode</th>
+                            <th>Nama Barang</th>
+                            <th>Kategori</th>
+                            <th>Stok</th>
+                            <th>Satuan</th>
+                            <th>Supplier</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-isi"></tbody>
+                </table>
+            </section>
+        </main>
+
+        <aside>
+            <h3>Informasi Stok</h3>
+            <div class="stat-card">
+                <strong>Total Item Terdaftar</strong>
+                <p id="stat-total">0 Jenis</p>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 <strong>Hunny Pet Care</strong>. Semua Hak Dilindungi.</p>
+        <p>Jl. Kucing Salto No. 67, Kota Bomboclat | Hubungi: +62 812 3456 7890 | Email: hunnypetcare@gmail.com</p>
+    </footer>
+
+    <script>
+        /* INI BUAT NOMER 4 TUGASNYA YG "(4) Tabel daftar 5 barang yang sudah masuk" */
+        function inisialisasiDataAwal() {
+            let daftarBarang = JSON.parse(localStorage.getItem('stokBarang')) || [];
+            
+            if (daftarBarang.length === 0) {
+                const dataAwal = [
+                    { tgl: '2026-03-01', kode: 'SHM-001', nama: 'Shampoo Medicated', kategori: 'Shampoo', jumlah: '10', satuan: 'Botol', supplier: 'PetCare Indo' },
+                    { tgl: '2026-03-02', kode: 'CKR-002', nama: 'Clipper Wahl Pro', kategori: 'Alat Cukur', jumlah: '3', satuan: 'Set', supplier: 'Electronic Pet' },
+                    { tgl: '2026-03-03', kode: 'VTM-003', nama: 'Vitamin Bulu Cair', kategori: 'Obat/Vitamin', jumlah: '25', satuan: 'Pcs', supplier: 'Healthy Animal' },
+                    { tgl: '2026-03-04', kode: 'SRI-004', nama: 'Sisir Slicker L', kategori: 'Aksesoris', jumlah: '12', satuan: 'Pcs', supplier: 'Grooming Tools' },
+                    { tgl: '2026-03-05', kode: 'DRY-005', nama: 'Blower High Power', kategori: 'Elektronik', jumlah: '2', satuan: 'Unit', supplier: 'Pet Tech' }
+                ];
+                localStorage.setItem('stokBarang', JSON.stringify(dataAwal));
+            }
+        }
+
+        function muatData() {
+            inisialisasiDataAwal(); 
+            const tabel = document.getElementById('tabel-isi');
+            tabel.innerHTML = '';
+            let daftarBarang = JSON.parse(localStorage.getItem('stokBarang')) || [];
+
+            daftarBarang.forEach((barang, index) => {
+                let row = tabel.insertRow();
+                row.innerHTML = `
+                    <td>${barang.tgl || '-'}</td> <td>${barang.kode}</td>
+                    <td>${barang.nama}</td>
+                    <td>${barang.kategori}</td>
+                    <td>${barang.jumlah}</td>
+                    <td>${barang.satuan}</td>
+                    <td>${barang.supplier}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editBarang(${index})">Edit</button>
+                        <button class="btn-hapus" onclick="hapusBarang(${index})">Hapus</button>
+                    </td>
+                `;
+            });
+            document.getElementById('stat-total').innerText = daftarBarang.length + " Jenis";
+        }
+
+        function hapusBarang(index) {
+            if (confirm("Apakah kamu yakin ingin menghapus barang ini?")) {
+                let daftarBarang = JSON.parse(localStorage.getItem('stokBarang')) || [];
+                daftarBarang.splice(index, 1);
+                localStorage.setItem('stokBarang', JSON.stringify(daftarBarang));
+                muatData();
+            }
+        }
+
+        function editBarang(index) {
+            let daftarBarang = JSON.parse(localStorage.getItem('stokBarang')) || [];
+            let barang = daftarBarang[index];
+            
+            let tglBaru = prompt("Edit Tanggal (YYYY-MM-DD):", barang.tgl);
+            let kodeBaru = prompt("Edit Kode Barang:", barang.kode);
+            let namaBaru = prompt("Edit Nama Barang:", barang.nama);
+            let stokBaru = prompt("Edit Jumlah Stok:", barang.jumlah);
+
+            if (namaBaru !== null && stokBaru !== null) {
+                daftarBarang[index].kode = kodeBaru || barang.kode;
+                daftarBarang[index].nama = namaBaru;
+                daftarBarang[index].jumlah = stokBaru;
+                daftarBarang[index].tgl = tglBaru || barang.tgl;
+                localStorage.setItem('stokBarang', JSON.stringify(daftarBarang));
+                muatData();
+            }
+        }
+
+        window.onload = muatData;
+    </script>
+</body>
+</html>
