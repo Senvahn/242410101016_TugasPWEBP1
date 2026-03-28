@@ -1,4 +1,3 @@
-/* --- TAMPILAN DASAR & BACKGROUND (SESUAI INVENTARIS) --- */
 body { 
     font-family: 'Segoe UI', sans-serif; 
     margin: 0; 
@@ -13,7 +12,6 @@ body {
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* --- HEADER & NAVIGASI (FIXED) --- */
 header { 
     background: #2c3e50; 
     color: white; 
@@ -32,7 +30,6 @@ nav { display: flex; gap: 20px; }
 nav a { color: white; text-decoration: none; font-weight: bold; transition: 0.3s; }
 nav a:hover { color: #3498db; }
 
-/* --- HERO SECTION --- */
 .hero {
     background: linear-gradient(rgba(47, 126, 178, 0.4), rgba(255, 255, 255, 0.7));
     height: 150px;
@@ -43,10 +40,9 @@ nav a:hover { color: #3498db; }
     margin-bottom: 20px;
 }
 
-/* --- TATA LETAK UTAMA (GRID & SIDEBAR) --- */
 .container { 
     display: grid; 
-    grid-template-columns: 1fr; /* Mobile: Tumpuk ke bawah */
+    grid-template-columns: 1fr; 
     gap: 20px; 
     padding: 20px;
 }
@@ -54,7 +50,6 @@ nav a:hover { color: #3498db; }
 .container-statistik {
     display: grid;
     gap: 15px;
-    /* Default Mobile: 1 Kolom */
     grid-template-columns: 1fr; 
 }
 
@@ -71,7 +66,6 @@ aside {
     border-radius: 8px; 
 }
 
-/* --- TABEL & FORM --- */
 h2 { border-bottom: 2px solid #3498db; padding-bottom: 10px; color: #2c3e50; }
 
 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -88,7 +82,6 @@ input, select, textarea {
     box-sizing: border-box;
 }
 
-/* --- TOMBOL & KARTU STATISTIK --- */
 button { 
     background: #3498db; 
     color: white; 
@@ -99,7 +92,6 @@ button {
     font-size: 16px; 
 }
 
-/* Styling Kartu Statistik Asli Anda + Animasi */
 .stat-card { 
     background: white; 
     padding: 15px; 
@@ -110,55 +102,49 @@ button {
 }
 
 .stat-card:hover {
-    transform: translateY(-5px) scale(1.02); /* Animasi Hover Poin 3 */
+    transform: translateY(-5px) scale(1.02); 
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     border-left-color: #3498db;
 }
 
 @media (min-width: 1024px) {
     .container { 
-        grid-template-columns: 3fr 1fr; /* Desktop: Sidebar di Kanan */
+        grid-template-columns: 3fr 1fr; 
     }
 }
 
 .grid-statistik {
     display: grid;
     gap: 15px;
-    grid-template-columns: 1fr; /* Mobile: 1 Kolom */
+    grid-template-columns: 1fr; 
 }
 
 @media (min-width: 600px) {
     .grid-statistik {
-        grid-template-columns: repeat(2, 1fr); /* Tablet: 2 Kolom */
+        grid-template-columns: repeat(2, 1fr); 
     }
 }
 
-/* GANTI bagian .grid-statistik yang lama dengan ini */
 .grid-statistik {
     display: grid;
     gap: 15px;
-    grid-template-columns: 1fr; /* Default Mobile: 1 Kolom */
+    grid-template-columns: 1fr; 
     margin-bottom: 20px;
 }
 
-/* TAMBAHKAN Media Query ini di bagian paling bawah file style.css */
-
-/* Tablet: 2 Kolom (min-width 600px) */
 @media (min-width: 600px) {
     .grid-statistik {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* Desktop: 4 Kolom (min-width 1024px) */
 @media (min-width: 1024px) {
     .grid-statistik {
         grid-template-columns: repeat(4, 1fr);
     }
     
-    /* Agar grid ini bisa melebar 4 kolom, kita buat container-nya full width */
     .container {
-        display: block; /* Mengubah grid layout utama agar statistik punya ruang lebar */
+        display: block; 
     }
     
     main, aside {
@@ -166,29 +152,23 @@ button {
     }
 }
 
-/* EFECT HOVER (Poin 3) - Pastikan ini ada */
 .stat-card:hover {
-    transform: translateY(-10px) scale(1.02); /* Melayang ke atas */
+    transform: translateY(-10px) scale(1.02); 
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     border-left-color: #3498db;
     background-color: #f9f9f9;
 }
 
-
-
-/* --- FOOTER (GRID 4 KOLOM) --- */
 footer { 
     background: #2c3e50; 
     color: white; 
     padding: 40px 60px; 
     margin-top: 30px;
     display: grid;
-    /* Default Mobile: 1 Kolom */
     grid-template-columns: 1fr; 
     gap: 30px;
 }
 
-/* Desktop: 3 Kolom */
 @media (min-width: 1024px) {
     footer {
         grid-template-columns: repeat(3, 1fr); 
@@ -197,7 +177,6 @@ footer {
 }
 
 .footer-bottom { 
-    /* Mengikuti instruksi 3 kolom, maka span diubah dari 4 menjadi 3 */
     grid-column: 1 / -1; 
     border-top: 1px solid #444; 
     padding-top: 20px; 
@@ -208,20 +187,18 @@ footer {
     font-size: 15px;
 }
 
-/* --- CHART & BAR (UNTUK SIDEBAR) --- */
 .bar-bg { background: #eee; border-radius: 10px; height: 12px; width: 100%; overflow: hidden; }
 .bar-fill-puas { background: #27ae60; height: 100%; width: 87.5%; }
 .bar-fill-tidak { background: #e74c3c; height: 100%; width: 12.5%; }
 
-/* --- POIN 4: STYLING FORM PENCARIAN --- */
 .search-container {
-    margin-bottom: 20px; /* Memberi jarak dengan tabel di bawahnya */
+    margin-bottom: 20px; 
 }
 
 .search-form {
-    display: flex; /* Membuat input dan tombol sejajar horizontal */
-    gap: 10px;    /* Jarak antara input dan tombol */
-    max-width: 400px; /* Membatasi lebar agar tidak memenuhi layar desktop */
+    display: flex; 
+    gap: 10px;    
+    max-width: 400px; 
 }
 
 .search-input {
@@ -229,20 +206,19 @@ footer {
     padding: 10px 15px;
     border: 2px solid #ddd;
     border-radius: 5px;
-    outline: none; /* Menghilangkan garis biru default browser */
-    transition: all 0.3s ease; /* Membuat transisi warna jadi halus */
+    outline: none; 
+    transition: all 0.3s ease; 
 }
 
-/* --- DETAIL FOCUS EFFECT (Syarat Utama Poin 4) --- */
 .search-input:focus {
-    border-color: #3498db; /* Berubah warna border jadi biru */
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4); /* Efek cahaya di sekitar input */
+    border-color: #3498db; 
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4); 
     background-color: #fff;
 }
 
 .search-button {
     padding: 10px 20px;
-    background-color: #2c3e50; /* Warna gelap senada dengan header */
+    background-color: #2c3e50; 
     color: white;
     border: none;
     border-radius: 5px;
@@ -251,13 +227,9 @@ footer {
 }
 
 .search-button:hover {
-    background-color: #34495e; /* Warna berubah sedikit saat kursor menempel */
+    background-color: #34495e; 
 }
 
-/* Sembunyikan semua baris secara default jika ingin filter selektif */
-/* Atau biarkan tampil semua, lalu sembunyikan yang tidak diceklis */
-
-/* Contoh Logika: Jika filter TIDAK diceklis, maka sembunyikan kategori terkait */
 #filter-shampoo:not(:checked) ~ .container main .item-shampoo {
     display: none;
 }
