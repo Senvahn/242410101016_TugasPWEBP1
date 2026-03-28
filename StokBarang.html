@@ -4,34 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Hunny Pet Care</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f7f6; }
-        header { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
-        nav { background: #34495e; padding: 0.5rem 2rem; }
-        nav a { color: white; text-decoration: none; margin-right: 20px; font-weight: bold; }
-        .container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; padding: 20px; }
-        section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { border-bottom: 2px solid #27ae60; padding-bottom: 10px; color: #2c3e50; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px; }
-        th { background-color: #27ae60; color: white; }
-        
-        .btn-edit { background: #f39c12; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
-        .btn-hapus { background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        
-        aside { background: #ecf0f1; padding: 20px; border-radius: 8px; }
-        .stat-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #27ae60; }
-        footer { background: #2c3e50; color: white; text-align: center; padding: 1rem; margin-top: 20px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <header>
-        <div style="display: flex; align-items: center;">
-            <img src="logohunny.webp" alt="Logo" width="60" height="60">
-            <h1 style="margin-left: 15px;">Hunny Pet Care</h1>
-        </div>
-    </header>
+<header>
+    <div style="display: flex; align-items: center;">
+        <img src="logohunny.webp" alt="Logo" width="50" height="50">
+        <h1 style="margin-left: 15px; font-size: 1.2rem;">Hunny Pet Care</h1>
+    </div>
+    <nav>
+        <a href="Inventaris.html">Inventaris</a>
+        <a href="Reservasi.html">Reservasi</a>
+        <a href="StokBarang.html">Stok Barang</a>
+    </nav>
+</header>
 
     <nav>
         <a href="Inventaris.html">Inventaris</a>
@@ -42,6 +29,30 @@
         <main>
             <section>
                 <h2>Daftar Stok Barang</h2>
+                <div class="search-container">
+                    <div class="search-form">
+                        <input type="text" placeholder="Cari kode atau nama barang..." class="search-input">
+                        <button type="submit" class="search-button">Cari</button>
+                    </div>
+                </div>
+                <div class="grid-produk">
+                <div class="card-produk">
+                    <h4>Total Botol</h4>
+                    <p>45 Unit</p>
+                </div>
+                <div class="card-produk">
+                    <h4>Alat Cukur</h4>
+                    <p>12 Set</p>
+                </div>
+                <div class="card-produk">
+                    <h4>Vitamin</h4>
+                    <p>80 Pcs</p>
+                </div>
+                <div class="card-produk">
+                    <h4>Elektronik</h4>
+                    <p>5 Unit</p>
+                </div>
+            </div>
                 <table>
                     <thead>
                         <tr>
@@ -54,27 +65,70 @@
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="tabel-isi"></tbody>
+                    <tbody id="tabel-isi">
+                        <tr class="item-shampoo">
+                            <td>2026-03-01</td><td>SHM-001</td><td>Shampoo Medicated</td><td>Shampoo</td><td>10</td><td>Botol</td><td>PetCare Indo</td><td>...</td>
+                        </tr>
+                        <tr class="item-cukur">
+                            <td>2026-03-02</td><td>CKR-002</td><td>Clipper Wahl Pro</td><td>Alat Cukur</td><td>3</td><td>Set</td><td>Electronic Pet</td><td>...</td>
+                        </tr>
+                    </tbody>
                 </table>
             </section>
         </main>
 
         <aside>
-            <h3>Informasi Stok</h3>
-            <div class="stat-card">
+                <h3>Filter Kategori</h3>
+                <div class="filter-group">
+                    <label><input type="checkbox" id="filter-shampoo"> Shampoo</label>
+                    <label><input type="checkbox" id="filter-cukur"> Alat Cukur</label>
+                    <label><input type="checkbox" id="filter-obat"> Obat/Vitamin</label>
+                    <label><input type="checkbox" id="filter-elektronik"> Elektronik</label>
+                </div>
+            <div class="stat-card" style="margin-top: 20px;">
                 <strong>Total Item Terdaftar</strong>
                 <p id="stat-total">0 Jenis</p>
             </div>
         </aside>
     </div>
 
-    <footer>
-        <p>&copy; 2024 <strong>Hunny Pet Care</strong>. Semua Hak Dilindungi.</p>
-        <p>Jl. Kucing Salto No. 67, Kota Bomboclat | Hubungi: +62 812 3456 7890 | Email: hunnypetcare@gmail.com</p>
-    </footer>
+        <footer>
+            <div>
+                <div style="margin-bottom: 15px;">
+                    <img src="logohunny.webp" alt="Logo Hunny" style="width: 100px; height: auto; filter: brightness(0) invert(1); opacity: 0.8;">
+                </div>
+                <h4>Hunny Pet Care</h4>
+                <p style="font-size: 16px;">Menyediakan solusi manajemen perlengkapan anabul anda.</p>
+            </div>
+
+            <div>
+                <h4>Tautan Cepat</h4>
+                <p>
+                    <a href="Inventaris.html" style="color:white; text-decoration:none; font-size: 16px;">>Input Barang</a><br>
+                    <a href="Reservasi.html" style="color:white; text-decoration:none; font-size: 16px;">>Daftar Reservasi</a><br>  
+                    <a href="StokBarang.html" style="color:white; text-decoration:none; font-size: 16px;">>Lihat Stok</a>
+                </p>
+            </div>
+
+            <div>
+                <h4>Lokasi Kami</h4>
+                <p style="font-size: 16px;">
+                    Jl. Kucing Salto No. 67,<br>
+                    Kota Kucingwangy, Provinsi Bomboclat,<br>
+                    Anabulesia
+                </p>
+                <p style="font-size: 14px; margin-top: 10px; border-top: 1px solid #555; padding-top: 10px;">
+                    Email: hunnypetcare@gmail.com<br>
+                    WA: +62 812 3456 7890
+                </p>
+            </div>
+
+            <div class="footer-bottom">
+                <span>&copy; 2024 <strong>Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+            </div>
+        </footer>
 
     <script>
-        /* INI BUAT NOMER 4 TUGASNYA YG "(4) Tabel daftar 5 barang yang sudah masuk" */
         function inisialisasiDataAwal() {
             let daftarBarang = JSON.parse(localStorage.getItem('stokBarang')) || [];
             
@@ -82,7 +136,7 @@
                 const dataAwal = [
                     { tgl: '2026-03-01', kode: 'SHM-001', nama: 'Shampoo Medicated', kategori: 'Shampoo', jumlah: '10', satuan: 'Botol', supplier: 'PetCare Indo' },
                     { tgl: '2026-03-02', kode: 'CKR-002', nama: 'Clipper Wahl Pro', kategori: 'Alat Cukur', jumlah: '3', satuan: 'Set', supplier: 'Electronic Pet' },
-                    { tgl: '2026-03-03', kode: 'VTM-003', nama: 'Vitamin Bulu Cair', kategori: 'Obat/Vitamin', jumlah: '25', satuan: 'Pcs', supplier: 'Healthy Animal' },
+                    { tgl: '2026-03-03', kode: 'VTM-003', nama: 'Vitamin Bulu Cair', kategori: 'Vitamin', jumlah: '25', satuan: 'Pcs', supplier: 'Healthy Animal' },
                     { tgl: '2026-03-04', kode: 'SRI-004', nama: 'Sisir Slicker L', kategori: 'Aksesoris', jumlah: '12', satuan: 'Pcs', supplier: 'Grooming Tools' },
                     { tgl: '2026-03-05', kode: 'DRY-005', nama: 'Blower High Power', kategori: 'Elektronik', jumlah: '2', satuan: 'Unit', supplier: 'Pet Tech' }
                 ];

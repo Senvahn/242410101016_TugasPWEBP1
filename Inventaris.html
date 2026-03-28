@@ -6,53 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hunny Pet Care</title>
     <link rel="stylesheet" href="style.css"> 
-    <style>
-
-        /* TEMPLATE BUAT KEBAWAHNYA BIAR GMPANG */
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f7f6; }
-        header { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
-        nav { background: #34495e; padding: 0.5rem 2rem; }
-        nav a { color: white; text-decoration: none; margin-right: 20px; font-weight: bold; }
-        .container { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; padding: 20px; }
-        section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { border-bottom: 2px solid #3498db; padding-bottom: 10px; color: #2c3e50; }
-        form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .full-width { grid-column: span 2; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { background: #3498db; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; grid-column: span 2; font-size: 16px; }
-        aside { background: #ecf0f1; padding: 20px; border-radius: 8px; }
-        .stat-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #dd8038; }
-        footer { background: #2c3e50; color: white; text-align: center; padding: 1rem; margin-top: 20px; }
-
-        /* (nitip) Khusus Bar chart puaas */
-        .chart-container { margin-top: 10px; }
-        .bar-group { margin-bottom: 10px; }
-        .bar-label { font-size: 13px; display: flex; justify-content: space-between; margin-bottom: 4px; }
-        .bar-bg { background: #eee; border-radius: 10px; height: 12px; width: 100%; overflow: hidden; }
-        .bar-fill-puas { background: #27ae60; height: 100%; width: 87.5%; }
-        .bar-fill-tidak { background: #e74c3c; height: 100%; width: 12.5%; } 
-        .rating-star { color: #f1c40f; font-size: 18px; font-weight: bold; }
-    </style>
 </head>
 
 <body>
-    <header>
-        <div style="display: flex; align-items: center;">
-            <img src="logohunny.webp" alt="Logo" width="60" height="60">
-            <h1 style="margin-left: 15px;">Hunny Pet Care</h1>
-        </div>
-    </header>
-
+<header>
+    <div style="display: flex; align-items: center;">
+        <img src="logohunny.webp" alt="Logo" width="50" height="50">
+        <h1 style="margin-left: 15px; font-size: 1.2rem;">Hunny Pet Care</h1>
+    </div>
     <nav>
         <a href="Inventaris.html">Inventaris</a>
         <a href="Reservasi.html">Reservasi</a>
         <a href="StokBarang.html">Stok Barang</a>
     </nav>
+</header>
+
+<div class="hero">
+    <h2 style="margin: 0;">Panel Manajemen Inventaris Admin</h2>
+</div>
 
     <div class="container">
         <main>
-            <section>
                 <h2>Tambah Stok Inventaris</h2>
                 <form action="StokBarang.html" method="GET"> 
                     <div>
@@ -93,7 +67,7 @@
 
                     <div>
                         <label>Harga Beli (Rp)</label>
-                        <input type="number" name="harga" placeholder="Rp" required>
+                        <input type="text" name="harga" placeholder="Rp" required>
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 5px;">   
@@ -116,46 +90,79 @@
                     </div>
                     <button type="submit">Simpan & Masukkan ke Stok</button>
                 </form>
-            </section>
         </main>
 
         <aside>
             <h3>Statistik</h3>
-            <div class="stat-card">
-                <strong>Admin Bertugas</strong>
-                <p>Hunnnihunt</p>
-            </div>
-            
-            <div class="stat-card">
-                <strong>Status Sistem</strong>
-                <p style="color: green;">Online</p>
-            </div>
+            <div class="grid-statistik"> <div class="stat-card">
+                    <strong>Admin Bertugas</strong>
+                    <p>Hunnnihunt</p>
+                </div>
+                
+                <div class="stat-card">
+                    <strong>Status Sistem</strong>
+                    <p style="color: green;">Online</p>
+                </div>
 
-            <div class="stat-card">
-                <strong>Data Kepuasan Pelanggan</strong>
-                <div class="chart-container">
-                    <div class="bar-group">
-                        <div class="bar-label"><span>Puas 😊</span> <span>140</span></div>
-                        <div class="bar-bg"><div class="bar-fill-puas"></div></div>
-                    </div>
-                    <div class="bar-group">
-                        <div class="bar-label"><span>Tidak Puas ☹️</span> <span>20</span></div>
-                        <div class="bar-bg"><div class="bar-fill-tidak"></div></div>
+                <div class="stat-card">
+                    <strong>Data Kepuasan Pelanggan</strong>
+                    <div class="chart-container">
+                        <div class="bar-group">
+                            <div class="bar-label"><span>Puas 😊</span> <span>140</span></div>
+                            <div class="bar-bg"><div class="bar-fill-puas"></div></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar-label"><span>Tidak Puas ☹️</span> <span>20</span></div>
+                            <div class="bar-bg"><div class="bar-fill-tidak"></div></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="stat-card">
-                <strong>Rating Hunny Pet Care</strong>
-                <p class="rating-star">4,8 ⭐</p>
+                <div class="stat-card">
+                    <strong>Rating Hunny Pet Care</strong>
+                    <p class="rating-star">4,8 ⭐</p>
+                </div>
+
             </div>
         </aside>
+
     </div>
 
-    <footer>
-        <p>&copy; 2024 <strong>Hunny Pet Care</strong>. Semua Hak Dilindungi.</p>
-        <p>Jl. Kucing Salto No. 67, Kota Bomboclat | Hubungi: +62 812 3456 7890 | Email: hunnypetcare@gmail.com</p>
-    </footer>
+        <footer>
+            <div>
+                <div style="margin-bottom: 15px;">
+                    <img src="logohunny.webp" alt="Logo Hunny" style="width: 100px; height: auto; filter: brightness(0) invert(1); opacity: 0.8;">
+                </div>
+                <h4>Hunny Pet Care</h4>
+                <p style="font-size: 16px;">Menyediakan solusi manajemen perlengkapan anabul anda.</p>
+            </div>
+
+            <div>
+                <h4>Tautan Cepat</h4>
+                <p>
+                    <a href="Inventaris.html" style="color:white; text-decoration:none; font-size: 16px;">>Input Barang</a><br>
+                    <a href="Reservasi.html" style="color:white; text-decoration:none; font-size: 16px;">>Daftar Reservasi</a><br>  
+                    <a href="StokBarang.html" style="color:white; text-decoration:none; font-size: 16px;">>Lihat Stok</a>
+                </p>
+            </div>
+
+            <div>
+                <h4>Lokasi Kami</h4>
+                <p style="font-size: 16px;">
+                    Jl. Kucing Salto No. 67,<br>
+                    Kota Kucingwangy, Provinsi Bomboclat,<br>
+                    Anabulesia
+                </p>
+                <p style="font-size: 14px; margin-top: 10px; border-top: 1px solid #555; padding-top: 10px;">
+                    Email: hunnypetcare@gmail.com<br>
+                    WA: +62 812 3456 7890
+                </p>
+            </div>
+
+            <div class="footer-bottom">
+                <span>&copy; 2024 <strong>Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+            </div>
+        </footer>
 
     <script>
         const form = document.querySelector('form');
