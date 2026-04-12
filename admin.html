@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Hunny Pet Care</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="dash-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-brand">
+      <img src="logohunny.webp" alt="Logo Hunny">
+      <div class="sidebar-brand-text">
+        <span class="brand-name">Hunny Pet Care</span>
+        <span class="brand-sub">Admin Panel</span>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <span class="nav-label">Menu Utama</span>
+      <a href="admin.html" class="nav-item active">
+        <i class="nav-icon fas fa-plus-circle"></i> Input Inventaris
+      </a>
+      <a href="reservasi.html" class="nav-item">
+        <i class="nav-icon fas fa-calendar-alt"></i> Reservasi
+      </a>
+      <a href="stokbarang.html" class="nav-item">
+        <i class="nav-icon fas fa-boxes"></i> Stok Barang
+      </a>
+      <span class="nav-label">Lainnya</span>
+      <a href="index.html" class="nav-item">
+        <i class="nav-icon fas fa-home"></i> Halaman Utama
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">H</div>
+        <div class="user-info">
+          <div class="user-name">Hunnnihunt</div>
+          <div class="user-role">Administrator</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <button class="hamburger" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+        <div class="topbar-left">
+          <h2>Input Inventaris</h2>
+          <p>Tambah stok barang ke sistem</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-badge">
+          <span class="dot"></span> Sistem Online
+        </div>
+        <a href="stokbarang.html" class="btn btn-outline btn-sm">
+          <i class="fas fa-list"></i> Lihat Stok
+        </a>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+
+      <!-- STAT CARDS -->
+      <div class="stats-grid fade-in">
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fas fa-user-tie"></i></div>
+          <div class="stat-value">1</div>
+          <div class="stat-label">Admin Bertugas</div>
+          <div class="stat-change neutral"><i class="fas fa-circle"></i> Hunnnihunt</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-server"></i></div>
+          <div class="stat-value" style="color:var(--success);font-size:1.4rem;">Online</div>
+          <div class="stat-label">Status Sistem</div>
+          <div class="stat-change up"><i class="fas fa-arrow-up"></i> 99.9% Uptime</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-smile"></i></div>
+          <div class="stat-value">140</div>
+          <div class="stat-label">Pelanggan Puas</div>
+          <div class="stat-change up"><i class="fas fa-arrow-up"></i> 87.5% kepuasan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fas fa-star"></i></div>
+          <div class="stat-value">4.8</div>
+          <div class="stat-label">Rating Keseluruhan</div>
+          <div class="stat-change up"><i class="fas fa-arrow-up"></i> ⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;" class="fade-in fade-in-delay-1">
+
+        <!-- FORM CARD -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fas fa-plus-circle" style="color:var(--accent);margin-right:8px;"></i>Tambah Stok Inventaris</h3>
+            <span class="badge badge-orange">Form Input</span>
+          </div>
+          <div class="card-body">
+            <form id="inventarisForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Kode Barang <span style="color:var(--danger)">*</span></label>
+                  <input type="text" name="kode" class="form-control" placeholder="cth. SHM-001" required>
+                </div>
+                <div class="form-group">
+                  <label>Nama Barang <span style="color:var(--danger)">*</span></label>
+                  <input type="text" name="nama" class="form-control" placeholder="Nama barang" required>
+                </div>
+                <div class="form-group">
+                  <label>Kategori</label>
+                  <select name="kategori" class="form-control">
+                    <option>Shampoo</option>
+                    <option>Alat Cukur</option>
+                    <option>Obat/Vitamin</option>
+                    <option>Aksesoris</option>
+                    <option>Elektronik</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Jumlah <span style="color:var(--danger)">*</span></label>
+                  <input type="number" name="jumlah" class="form-control" placeholder="0" required>
+                </div>
+                <div class="form-group">
+                  <label>Satuan</label>
+                  <select name="satuan" class="form-control">
+                    <option>Botol</option>
+                    <option>Set</option>
+                    <option>Pcs</option>
+                    <option>Unit</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Harga Beli (Rp) <span style="color:var(--danger)">*</span></label>
+                  <input type="text" name="harga" class="form-control" placeholder="Rp 0" required>
+                </div>
+                <div class="form-group">
+                  <label>Tanggal Masuk <span style="color:var(--danger)">*</span></label>
+                  <input type="date" name="tgl" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Supplier <span style="color:var(--danger)">*</span></label>
+                  <input type="text" name="supplier" class="form-control" placeholder="Nama supplier" required>
+                </div>
+              </div>
+              <div style="margin-top:24px;display:flex;gap:12px;justify-content:flex-end;">
+                <button type="button" onclick="resetForm()" class="btn btn-outline">
+                  <i class="fas fa-undo"></i> Reset
+                </button>
+                <button type="submit" class="btn btn-accent">
+                  <i class="fas fa-save"></i> Simpan & Masukkan ke Stok
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- SIDEBAR STATS -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <!-- Satisfaction Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Kepuasan Pelanggan</h3>
+            </div>
+            <div class="card-body">
+              <div class="bar-group">
+                <div class="bar-label"><span>😊 Puas</span><span style="font-weight:600;color:var(--success)">140</span></div>
+                <div class="bar-bg"><div class="bar-fill-puas"></div></div>
+              </div>
+              <div class="bar-group">
+                <div class="bar-label"><span>😞 Tidak Puas</span><span style="font-weight:600;color:var(--danger)">20</span></div>
+                <div class="bar-bg"><div class="bar-fill-tidak"></div></div>
+              </div>
+              <div class="divider"></div>
+              <div class="rating-display">
+                <div class="rating-number">4.8</div>
+                <div>
+                  <div class="stars">★★★★★</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted)">Rating rata-rata</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Aksi Cepat</h3>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+              <a href="stokbarang.html" class="btn btn-primary" style="justify-content:center;">
+                <i class="fas fa-boxes"></i> Lihat Semua Stok
+              </a>
+              <a href="reservasi.html" class="btn btn-outline" style="justify-content:center;">
+                <i class="fas fa-calendar-alt"></i> Daftar Reservasi
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-brand">
+            <img src="logohunny.webp" alt="Logo">
+          </div>
+          <h4>Hunny Pet Care</h4>
+          <p>Solusi manajemen perlengkapan anabul yang terpercaya.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Tautan Cepat</h4>
+          <a href="admin.html">Input Barang</a>
+          <a href="reservasi.html">Daftar Reservasi</a>
+          <a href="stokbarang.html">Lihat Stok</a>
+        </div>
+        <div class="footer-col">
+          <h4>Lokasi Kami</h4>
+          <p>Jl. Kucing Salto No. 67,<br>Kota Kucingwangy, Provinsi Bomboclat,<br>Anabulesia</p>
+          <p style="margin-top:10px;">Email: hunnypetcare@gmail.com<br>WA: +62 812 3456 7890</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 <strong>Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+      </div>
+    </footer>
+
+  </div><!-- end main-content -->
+</div><!-- end dash-layout -->
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // Sidebar toggle
+  function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('open');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // Toast notification
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+  }
+
+  // Reset form
+  function resetForm() {
+    document.getElementById('inventarisForm').reset();
+    showToast('Form direset.', 'info');
+  }
+
+  // Form submit
+  document.getElementById('inventarisForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+      kode: this.kode.value,
+      nama: this.nama.value,
+      kategori: this.kategori.value,
+      jumlah: this.jumlah.value,
+      satuan: this.satuan.value,
+      harga: this.harga.value,
+      tgl: this.tgl.value,
+      supplier: this.supplier.value
+    };
+    let daftarBarang = JSON.parse(localStorage.getItem('stokBarang')) || [];
+    daftarBarang.push(data);
+    localStorage.setItem('stokBarang', JSON.stringify(daftarBarang));
+    showToast('Barang berhasil disimpan ke stok!', 'success');
+    this.reset();
+    setTimeout(() => { window.location.href = 'stokbarang.html'; }, 1500);
+  });
+
+  // Set today's date as default
+  document.querySelector('input[name="tgl"]').valueAsDate = new Date();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

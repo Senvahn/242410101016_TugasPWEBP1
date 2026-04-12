@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stok Barang | Hunny Pet Care</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .stok-badge {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .stok-low { color: var(--danger); }
+    .stok-ok { color: var(--success); }
+    .stok-mid { color: var(--warning); }
+
+    .modal-overlay { display: flex; }
+  </style>
+</head>
+<body>
+
+<div class="dash-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-brand">
+      <img src="logohunny.webp" alt="Logo Hunny">
+      <div class="sidebar-brand-text">
+        <span class="brand-name">Hunny Pet Care</span>
+        <span class="brand-sub">Admin Panel</span>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <span class="nav-label">Menu Utama</span>
+      <a href="admin.html" class="nav-item">
+        <i class="nav-icon fas fa-plus-circle"></i> Input Inventaris
+      </a>
+      <a href="reservasi.html" class="nav-item">
+        <i class="nav-icon fas fa-calendar-alt"></i> Reservasi
+      </a>
+      <a href="stokbarang.html" class="nav-item active">
+        <i class="nav-icon fas fa-boxes"></i> Stok Barang
+      </a>
+      <span class="nav-label">Lainnya</span>
+      <a href="index.html" class="nav-item">
+        <i class="nav-icon fas fa-home"></i> Halaman Utama
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">H</div>
+        <div class="user-info">
+          <div class="user-name">Hunnnihunt</div>
+          <div class="user-role">Administrator</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <button class="hamburger" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+        <div class="topbar-left">
+          <h2>Stok Barang</h2>
+          <p>Manajemen inventaris perlengkapan</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-badge">
+          <span class="dot"></span> Sistem Online
+        </div>
+        <a href="admin.html" class="btn btn-accent btn-sm">
+          <i class="fas fa-plus"></i> Tambah Barang
+        </a>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+
+      <!-- SUMMARY CARDS -->
+      <div class="product-cards fade-in" id="summaryCards">
+        <!-- filled by JS -->
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid fade-in fade-in-delay-1">
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-layer-group"></i></div>
+          <div class="stat-value" id="totalJenis">0</div>
+          <div class="stat-label">Total Jenis Barang</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-cubes"></i></div>
+          <div class="stat-value" id="totalStok">0</div>
+          <div class="stat-label">Total Stok Unit</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
+          <div class="stat-value" id="stokRendah">0</div>
+          <div class="stat-label">Stok Rendah (&lt;5)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fas fa-tags"></i></div>
+          <div class="stat-value" id="totalKategori">0</div>
+          <div class="stat-label">Kategori Aktif</div>
+        </div>
+      </div>
+
+      <!-- TABLE CARD -->
+      <div class="card fade-in fade-in-delay-2">
+        <div class="card-header">
+          <h3><i class="fas fa-boxes" style="color:var(--accent);margin-right:8px;"></i>Daftar Stok Barang</h3>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <div class="search-bar">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Cari kode atau nama..." oninput="filterBarang(this.value)" id="searchInput">
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTER CHIPS -->
+        <div style="padding:16px 24px 0;">
+          <div class="filter-chips" id="filterChips">
+            <div class="chip active" onclick="setFilter('', this)">
+              <i class="fas fa-th"></i> Semua
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body" style="padding:0;">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Tgl Masuk</th>
+                  <th>Kode</th>
+                  <th>Nama Barang</th>
+                  <th>Kategori</th>
+                  <th>Stok</th>
+                  <th>Satuan</th>
+                  <th>Supplier</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tabelStok">
+              </tbody>
+            </table>
+          </div>
+          <div id="emptyState" class="empty-state" style="display:none;">
+            <i class="fas fa-box-open"></i>
+            <p>Tidak ada barang ditemukan.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end page-content -->
+
+    <!-- FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-brand"><img src="logohunny.webp" alt="Logo"></div>
+          <h4>Hunny Pet Care</h4>
+          <p>Solusi manajemen perlengkapan anabul yang terpercaya.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Tautan Cepat</h4>
+          <a href="admin.html">Input Barang</a>
+          <a href="reservasi.html">Daftar Reservasi</a>
+          <a href="stokbarang.html">Lihat Stok</a>
+        </div>
+        <div class="footer-col">
+          <h4>Lokasi Kami</h4>
+          <p>Jl. Kucing Salto No. 67,<br>Kota Kucingwangy, Provinsi Bomboclat,<br>Anabulesia</p>
+          <p style="margin-top:10px;">Email: hunnypetcare@gmail.com<br>WA: +62 812 3456 7890</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 <strong>Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+      </div>
+    </footer>
+
+  </div><!-- end main-content -->
+</div><!-- end dash-layout -->
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <h3><i class="fas fa-edit" style="color:var(--accent);margin-right:8px;"></i>Edit Barang</h3>
+      <button class="modal-close" onclick="closeEdit()"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="editForm">
+      <input type="hidden" id="editIndex">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tanggal Masuk</label>
+          <input type="date" id="editTgl" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Kode Barang</label>
+          <input type="text" id="editKode" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Nama Barang</label>
+          <input type="text" id="editNama" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Jumlah Stok</label>
+          <input type="number" id="editJumlah" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="editKategori" class="form-control">
+            <option>Shampoo</option>
+            <option>Alat Cukur</option>
+            <option>Obat/Vitamin</option>
+            <option>Aksesoris</option>
+            <option>Elektronik</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Supplier</label>
+          <input type="text" id="editSupplier" class="form-control">
+        </div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:12px;justify-content:flex-end;">
+        <button type="button" onclick="closeEdit()" class="btn btn-outline">Batal</button>
+        <button type="submit" class="btn btn-accent"><i class="fas fa-save"></i> Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  const DATA_KEY = 'stokBarang';
+  let allData = [];
+  let activeFilter = '';
+
+  const dataAwal = [
+    { tgl: '2026-03-01', kode: 'SHM-001', nama: 'Shampoo Medicated', kategori: 'Shampoo', jumlah: '10', satuan: 'Botol', supplier: 'PetCare Indo' },
+    { tgl: '2026-03-02', kode: 'CKR-002', nama: 'Clipper Wahl Pro', kategori: 'Alat Cukur', jumlah: '3', satuan: 'Set', supplier: 'Electronic Pet' },
+    { tgl: '2026-03-03', kode: 'VTM-003', nama: 'Vitamin Bulu Cair', kategori: 'Obat/Vitamin', jumlah: '25', satuan: 'Pcs', supplier: 'Healthy Animal' },
+    { tgl: '2026-03-04', kode: 'SRI-004', nama: 'Sisir Slicker L', kategori: 'Aksesoris', jumlah: '12', satuan: 'Pcs', supplier: 'Grooming Tools' },
+    { tgl: '2026-03-05', kode: 'DRY-005', nama: 'Blower High Power', kategori: 'Elektronik', jumlah: '2', satuan: 'Unit', supplier: 'Pet Tech' }
+  ];
+
+  const katIcons = {
+    'Shampoo': 'fas fa-pump-soap',
+    'Alat Cukur': 'fas fa-cut',
+    'Obat/Vitamin': 'fas fa-pills',
+    'Aksesoris': 'fas fa-gem',
+    'Elektronik': 'fas fa-plug'
+  };
+
+  const katColors = {
+    'Shampoo': 'badge-blue',
+    'Alat Cukur': 'badge-orange',
+    'Obat/Vitamin': 'badge-green',
+    'Aksesoris': 'badge-yellow',
+    'Elektronik': 'badge-red'
+  };
+
+  function showToast(msg, type='success') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i> ${msg}`;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  function getData() {
+    let d = JSON.parse(localStorage.getItem(DATA_KEY));
+    if (!d || d.length === 0) {
+      localStorage.setItem(DATA_KEY, JSON.stringify(dataAwal));
+      return dataAwal;
+    }
+    return d;
+  }
+
+  function saveData(d) {
+    localStorage.setItem(DATA_KEY, JSON.stringify(d));
+  }
+
+  function getStokClass(jumlah) {
+    const n = parseInt(jumlah);
+    if (n <= 3) return 'stok-low';
+    if (n <= 8) return 'stok-mid';
+    return 'stok-ok';
+  }
+
+  function renderSummary(data) {
+    const cats = {};
+    data.forEach(b => {
+      if (!cats[b.kategori]) cats[b.kategori] = { count: 0, unit: b.satuan };
+      cats[b.kategori].count += parseInt(b.jumlah) || 0;
+    });
+    const container = document.getElementById('summaryCards');
+    container.innerHTML = '';
+    Object.entries(cats).forEach(([k, v]) => {
+      const div = document.createElement('div');
+      div.className = 'product-card';
+      div.innerHTML = `
+        <h4><i class="${katIcons[k] || 'fas fa-box'}" style="margin-right:4px;"></i>${k}</h4>
+        <p>${v.count} <span style="font-size:0.7rem;color:var(--text-muted);font-family:'DM Sans',sans-serif;">${v.unit}</span></p>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function renderFilterChips(data) {
+    const cats = [...new Set(data.map(b => b.kategori))];
+    const container = document.getElementById('filterChips');
+    container.innerHTML = `<div class="chip active" onclick="setFilter('', this)"><i class="fas fa-th"></i> Semua</div>`;
+    cats.forEach(cat => {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.innerHTML = `<i class="${katIcons[cat] || 'fas fa-box'}"></i> ${cat}`;
+      chip.onclick = function() { setFilter(cat, this); };
+      container.appendChild(chip);
+    });
+  }
+
+  function setFilter(cat, el) {
+    activeFilter = cat;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('searchInput').value = '';
+    const filtered = cat ? allData.filter(b => b.kategori === cat) : allData;
+    renderTable(filtered);
+  }
+
+  function filterBarang(q) {
+    const base = activeFilter ? allData.filter(b => b.kategori === activeFilter) : allData;
+    if (!q) { renderTable(base); return; }
+    const f = base.filter(b =>
+      b.kode.toLowerCase().includes(q.toLowerCase()) ||
+      b.nama.toLowerCase().includes(q.toLowerCase())
+    );
+    renderTable(f);
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('tabelStok');
+    const empty = document.getElementById('emptyState');
+    tbody.innerHTML = '';
+    if (!data.length) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+
+    data.forEach((b, i) => {
+      const realIndex = allData.indexOf(b);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="color:var(--text-muted);font-size:0.8rem;">${String(i+1).padStart(2,'0')}</td>
+        <td style="font-size:0.82rem;color:var(--text-muted);">${b.tgl || '-'}</td>
+        <td><code style="background:var(--cream-dark);padding:3px 7px;border-radius:4px;font-size:0.8rem;color:var(--primary);font-weight:600;">${b.kode}</code></td>
+        <td style="font-weight:500;">${b.nama}</td>
+        <td><span class="badge ${katColors[b.kategori] || 'badge-blue'}"><i class="${katIcons[b.kategori] || 'fas fa-box'}" style="margin-right:4px;"></i>${b.kategori}</span></td>
+        <td><span class="stok-badge ${getStokClass(b.jumlah)}">${b.jumlah}</span></td>
+        <td style="color:var(--text-muted);font-size:0.82rem;">${b.satuan}</td>
+        <td style="font-size:0.82rem;">${b.supplier}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="openEdit(${realIndex})"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="hapus(${realIndex})"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // update stats
+    document.getElementById('totalJenis').textContent = allData.length;
+    document.getElementById('totalStok').textContent = allData.reduce((s, b) => s + (parseInt(b.jumlah) || 0), 0);
+    document.getElementById('stokRendah').textContent = allData.filter(b => parseInt(b.jumlah) < 5).length;
+    document.getElementById('totalKategori').textContent = new Set(allData.map(b => b.kategori)).size;
+  }
+
+  function hapus(index) {
+    if (!confirm('Hapus barang ini dari stok?')) return;
+    allData.splice(index, 1);
+    saveData(allData);
+    renderSummary(allData);
+    renderFilterChips(allData);
+    const filtered = activeFilter ? allData.filter(b => b.kategori === activeFilter) : allData;
+    renderTable(filtered);
+    showToast('Barang berhasil dihapus.', 'info');
+  }
+
+  function openEdit(index) {
+    const b = allData[index];
+    document.getElementById('editIndex').value = index;
+    document.getElementById('editTgl').value = b.tgl || '';
+    document.getElementById('editKode').value = b.kode;
+    document.getElementById('editNama').value = b.nama;
+    document.getElementById('editJumlah').value = b.jumlah;
+    document.getElementById('editKategori').value = b.kategori;
+    document.getElementById('editSupplier').value = b.supplier;
+
+    const m = document.getElementById('editModal');
+    m.style.display = 'flex';
+    requestAnimationFrame(() => m.classList.add('open'));
+  }
+
+  function closeEdit() {
+    const m = document.getElementById('editModal');
+    m.classList.remove('open');
+    setTimeout(() => { m.style.display = 'none'; }, 250);
+  }
+
+  document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const i = parseInt(document.getElementById('editIndex').value);
+    allData[i].tgl = document.getElementById('editTgl').value;
+    allData[i].kode = document.getElementById('editKode').value;
+    allData[i].nama = document.getElementById('editNama').value;
+    allData[i].jumlah = document.getElementById('editJumlah').value;
+    allData[i].kategori = document.getElementById('editKategori').value;
+    allData[i].supplier = document.getElementById('editSupplier').value;
+    saveData(allData);
+    renderSummary(allData);
+    renderFilterChips(allData);
+    const filtered = activeFilter ? allData.filter(b => b.kategori === activeFilter) : allData;
+    renderTable(filtered);
+    closeEdit();
+    showToast('Barang berhasil diperbarui!', 'success');
+  });
+
+  function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('open');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // INIT
+  allData = getData();
+  renderSummary(allData);
+  renderFilterChips(allData);
+  renderTable(allData);
+</script>
+<script src="app.js"></script>
+</body>
+</html>
