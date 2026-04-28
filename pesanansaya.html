@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesanan Saya | Hunny Pet Care</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="cust-nav">
+  <a href="customer.html" class="cust-nav-brand">
+    <img src="logohunny.webp" alt="Logo Hunny">
+    <span>Hunny Pet Care</span>
+  </a>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="customer.html" class="btn btn-outline btn-sm">
+      <i class="fas fa-store"></i> Toko
+    </a>
+    <a href="customer.html" class="btn btn-accent btn-sm">
+      <i class="fas fa-shopping-bag"></i> Belanja Lagi
+    </a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Beranda</a>
+  <i class="fas fa-chevron-right"></i>
+  <a href="customer.html">Toko</a>
+  <i class="fas fa-chevron-right"></i>
+  <span>Pesanan Saya</span>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="page-hero-eyebrow"><i class="fas fa-box"></i> Riwayat Belanja</div>
+    <h1>Pesanan Saya 📦</h1>
+    <p>Pantau status pesanan dan konfirmasi pembayaran dari admin.</p>
+  </div>
+</div>
+
+<!-- WRAPPER -->
+<div class="page-wrapper">
+
+  <!-- INFO -->
+  <div class="info-box">
+    <i class="fas fa-info-circle"></i>
+    <div>Status pesanan diperbarui oleh admin. Jika sudah lama belum ada update, hubungi kami via WhatsApp <strong>+62 812 3456 7890</strong>. Klik tombol <strong>Refresh</strong> untuk memuat ulang status terbaru.</div>
+  </div>
+
+  <!-- SEARCH CARD -->
+  <div class="search-card">
+    <div class="form-group" style="margin:0;">
+      <label style="font-size:0.82rem;font-weight:600;color:var(--primary);margin-bottom:6px;display:block;">
+        <i class="fas fa-phone" style="color:var(--accent);margin-right:5px;"></i> No. WhatsApp
+      </label>
+      <input type="tel" id="waInput" class="form-control" placeholder="+62 8xx xxxx xxxx" style="margin:0;">
+    </div>
+    <div class="form-group" style="margin:0;flex:1;min-width:160px;">
+      <label style="font-size:0.82rem;font-weight:600;color:var(--primary);margin-bottom:6px;display:block;">
+        <i class="fas fa-search" style="color:var(--accent);margin-right:5px;"></i> Kode Pesanan (opsional)
+      </label>
+      <input type="text" id="kodeInput" class="form-control" placeholder="cth. ORD-ABC123" style="margin:0;" oninput="renderOrders()">
+    </div>
+    <button class="btn btn-accent" onclick="cariPesanan()" style="white-space:nowrap;align-self:flex-end;">
+      <i class="fas fa-search"></i> Cari Pesanan
+    </button>
+    <button class="btn btn-outline" onclick="refreshData()" style="white-space:nowrap;align-self:flex-end;">
+      <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+  </div>
+
+  <!-- STATUS STRIP -->
+  <div class="status-strip" id="statusStrip" style="display:none;">
+    <div class="status-chip active" onclick="filterByStatus('', this)">
+      <div class="status-chip-icon">📋</div>
+      <div class="status-chip-count" id="countAll">0</div>
+      <div class="status-chip-label">Semua</div>
+    </div>
+    <div class="status-chip" onclick="filterByStatus('Menunggu Konfirmasi', this)">
+      <div class="status-chip-icon">⏳</div>
+      <div class="status-chip-count" id="countMenunggu">0</div>
+      <div class="status-chip-label">Menunggu</div>
+    </div>
+    <div class="status-chip" onclick="filterByStatus('Diproses', this)">
+      <div class="status-chip-icon">🔄</div>
+      <div class="status-chip-count" id="countDiproses">0</div>
+      <div class="status-chip-label">Diproses</div>
+    </div>
+    <div class="status-chip" onclick="filterByStatus('Selesai', this)">
+      <div class="status-chip-icon">✅</div>
+      <div class="status-chip-count" id="countSelesai">0</div>
+      <div class="status-chip-label">Selesai</div>
+    </div>
+  </div>
+
+  <!-- ORDER LIST -->
+  <div id="orderList" class="order-list">
+    <div class="empty-state-big">
+      <i class="fas fa-search"></i>
+      <h3>Cari Pesananmu</h3>
+      <p>Masukkan nomor WhatsApp yang kamu gunakan saat checkout, lalu klik Cari Pesanan.</p>
+      <a href="customer.html" class="btn btn-accent" style="display:inline-flex;">
+        <i class="fas fa-shopping-bag"></i> Mulai Belanja
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- FOOTER -->
+<footer style="background:var(--primary);color:rgba(255,255,255,0.5);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;font-size:0.8rem;flex-wrap:wrap;gap:10px;">
+  <span>&copy; 2024 <strong style="color:var(--accent-light);">Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+  <span>WA: +62 812 3456 7890 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aec6dbc0c0d7decbdacdcfdccbeec9c3cfc7c280cdc1c3">[email&#160;protected]</a></span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  let myOrders = [];
+  let activeStatusFilter = '';
+  let activeWa = '';
+
+  const CATEGORY_ICONS = {
+    'Shampoo': '🧴', 'Alat Cukur': '✂️', 'Obat/Vitamin': '💊',
+    'Aksesoris': '🎀', 'Elektronik': '🔌'
+  };
+
+  function formatRp(n) {
+    return 'Rp ' + Number(n).toLocaleString('id-ID');
+  }
+
+  function showToast(msg, type='success') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i> ${msg}`;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  function getStatusClass(status) {
+    if (status === 'Menunggu Konfirmasi') return 'status-menunggu';
+    if (status === 'Diproses') return 'status-diproses';
+    if (status === 'Selesai') return 'status-selesai';
+    if (status === 'Dibatalkan') return 'status-dibatalkan';
+    return 'status-menunggu';
+  }
+
+  function getStatusIcon(status) {
+    if (status === 'Menunggu Konfirmasi') return 'fas fa-hourglass-half';
+    if (status === 'Diproses') return 'fas fa-spinner fa-spin';
+    if (status === 'Selesai') return 'fas fa-check-circle';
+    if (status === 'Dibatalkan') return 'fas fa-times-circle';
+    return 'fas fa-circle';
+  }
+
+  // Which step is active in the timeline
+  function getTimelineState(status) {
+    // steps: Pesanan Masuk → Diproses → Selesai
+    if (status === 'Menunggu Konfirmasi') return 0; // step 0 done, step 1 active
+    if (status === 'Diproses') return 1;
+    if (status === 'Selesai') return 2;
+    if (status === 'Dibatalkan') return -1;
+    return 0;
+  }
+
+  function renderTimeline(status) {
+    if (status === 'Dibatalkan') {
+      return `<div class="status-timeline" style="justify-content:center;">
+        <span style="color:var(--danger);font-size:0.82rem;font-weight:600;"><i class="fas fa-times-circle" style="margin-right:6px;"></i>Pesanan Dibatalkan</span>
+      </div>`;
+    }
+    const state = getTimelineState(status);
+    const steps = [
+      { label: 'Pesanan Masuk', icon: 'fas fa-inbox' },
+      { label: 'Diproses', icon: 'fas fa-cog' },
+      { label: 'Selesai', icon: 'fas fa-check' }
+    ];
+    return `<div class="status-timeline">
+      ${steps.map((s, i) => {
+        let dotClass = '';
+        let labelClass = '';
+        if (i < state) { dotClass = 'done'; labelClass = 'done'; }
+        else if (i === state) { dotClass = 'active'; labelClass = 'active'; }
+        return `<div class="timeline-step">
+          <div class="timeline-dot ${dotClass}"><i class="${s.icon}" style="font-size:0.65rem;"></i></div>
+          <div class="timeline-label ${labelClass}">${s.label}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  function renderOrderCard(order, idx) {
+    const statusClass = getStatusClass(order.status);
+    const statusIcon = getStatusIcon(order.status);
+    const itemCount = order.items ? order.items.length : 0;
+    const totalQty = order.items ? order.items.reduce((s, i) => s + i.qty, 0) : 0;
+
+    const itemsHtml = order.items ? order.items.map(item => {
+      const icon = CATEGORY_ICONS[item.kategori] || '📦';
+      return `<div class="item-row">
+        <div class="item-row-name">${icon} ${item.nama}</div>
+        <div class="item-row-qty">${item.qty} ${item.satuan || 'pcs'}</div>
+        <div class="item-row-price">${formatRp((item.hargaNum || 0) * item.qty)}</div>
+      </div>`;
+    }).join('') : '';
+
+    return `
+    <div class="order-card fade-in">
+      <div class="order-card-top">
+        <div>
+          <div class="order-kode">
+            <code>${order.kode}</code>
+            <span class="status-badge ${statusClass}">
+              <i class="${statusIcon}" style="font-size:0.6rem;"></i> ${order.status}
+            </span>
+          </div>
+          <div class="order-waktu">
+            <i class="fas fa-clock"></i> ${order.waktu}
+          </div>
+          <div class="order-meta">
+            <span><i class="fas fa-credit-card"></i> ${order.metode || '-'}</span>
+            <span><i class="fas fa-box"></i> ${itemCount} jenis · ${totalQty} item</span>
+            <span><i class="fas fa-map-marker-alt"></i> ${order.alamat || '-'}</span>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="order-total-badge">${formatRp(order.total)}</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;">Total Pembayaran</div>
+        </div>
+      </div>
+
+      ${renderTimeline(order.status)}
+
+      <div class="order-items-toggle" onclick="toggleItems(${idx})">
+        <span><i class="fas fa-box-open" style="margin-right:6px;color:var(--accent);"></i>Lihat Detail Item</span>
+        <i class="fas fa-chevron-down" id="chevron-${idx}" style="transition:transform 0.2s;"></i>
+      </div>
+      <div class="order-items-body" id="items-${idx}">
+        ${itemsHtml}
+        <div style="display:flex;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border);margin-top:6px;">
+          <span style="font-family:'Playfair Display',serif;font-weight:700;color:var(--accent);">${formatRp(order.total)}</span>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function toggleItems(idx) {
+    const body = document.getElementById('items-' + idx);
+    const chev = document.getElementById('chevron-' + idx);
+    body.classList.toggle('show');
+    chev.style.transform = body.classList.contains('show') ? 'rotate(180deg)' : '';
+  }
+
+  function updateStrip(orders) {
+    document.getElementById('countAll').textContent = orders.length;
+    document.getElementById('countMenunggu').textContent = orders.filter(o => o.status === 'Menunggu Konfirmasi').length;
+    document.getElementById('countDiproses').textContent = orders.filter(o => o.status === 'Diproses').length;
+    document.getElementById('countSelesai').textContent = orders.filter(o => o.status === 'Selesai').length;
+    document.getElementById('statusStrip').style.display = orders.length ? 'grid' : 'none';
+  }
+
+  function renderOrders() {
+    const kodeQ = document.getElementById('kodeInput').value.trim().toLowerCase();
+    let filtered = myOrders;
+
+    if (activeStatusFilter) {
+      filtered = filtered.filter(o => o.status === activeStatusFilter);
+    }
+
+    if (kodeQ) {
+      filtered = filtered.filter(o => o.kode.toLowerCase().includes(kodeQ));
+    }
+
+    updateStrip(myOrders);
+
+    if (!filtered.length) {
+      document.getElementById('orderList').innerHTML = `
+        <div class="empty-state-big">
+          <i class="fas fa-box-open"></i>
+          <h3>Tidak Ada Pesanan</h3>
+          <p>${myOrders.length ? 'Tidak ada pesanan dengan filter ini.' : 'Belum ada pesanan yang ditemukan untuk nomor WA ini.'}</p>
+          <a href="customer.html" class="btn btn-accent" style="display:inline-flex;">
+            <i class="fas fa-shopping-bag"></i> Mulai Belanja
+          </a>
+        </div>`;
+      return;
+    }
+
+    document.getElementById('orderList').innerHTML = filtered.map((o, i) => renderOrderCard(o, i)).join('');
+  }
+
+  function filterByStatus(status, el) {
+    activeStatusFilter = status;
+    document.querySelectorAll('.status-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderOrders();
+  }
+
+  function cariPesanan() {
+    const wa = document.getElementById('waInput').value.trim();
+    if (!wa) {
+      showToast('Masukkan nomor WhatsApp kamu!', 'error');
+      return;
+    }
+    activeWa = wa;
+    activeStatusFilter = '';
+    document.querySelectorAll('.status-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+
+    // Pull from shared konfirmasiPesanan (updated by admin) and match by WA
+    const allOrders = JSON.parse(localStorage.getItem('konfirmasiPesanan')) || [];
+    myOrders = allOrders.filter(o => o.wa && o.wa.replace(/\s/g, '').includes(wa.replace(/\s/g, '')));
+
+    if (!myOrders.length) {
+      showToast('Tidak ada pesanan ditemukan untuk nomor ini.', 'info');
+    } else {
+      showToast(`${myOrders.length} pesanan ditemukan!`, 'success');
+    }
+
+    renderOrders();
+  }
+
+  function refreshData() {
+    if (!activeWa) {
+      showToast('Cari pesanan terlebih dahulu.', 'info');
+      return;
+    }
+    // Re-pull from localStorage (which admin may have updated)
+    const allOrders = JSON.parse(localStorage.getItem('konfirmasiPesanan')) || [];
+    myOrders = allOrders.filter(o => o.wa && o.wa.replace(/\s/g, '').includes(activeWa.replace(/\s/g, '')));
+    renderOrders();
+    showToast('Status pesanan diperbarui!', 'success');
+  }
+
+  // Auto-fill WA from last checkout
+  window.addEventListener('DOMContentLoaded', () => {
+    const lastWa = localStorage.getItem('lastCustomerWa');
+    if (lastWa) {
+      document.getElementById('waInput').value = lastWa;
+      // Auto search
+      setTimeout(() => cariPesanan(), 300);
+    }
+  });
+</script>
+<script src="app.js"></script>
+</body>
+</html>
