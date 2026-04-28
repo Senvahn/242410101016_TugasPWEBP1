@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hunny Pet Care</title>
+  <link rel="stylesheet" href="{{ asset('style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="home-nav" id="homeNav">
+  <a href="index.html" class="nav-brand">
+    <img src="logohunny.webp" alt="Hunny Logo">
+    <span class="nav-brand-name">Hunny Pet Care</span>
+  </a>
+  <div class="nav-links">
+    <a href="{{ url('/customer') }}" class="nav-link-customer">Customer Portal</a>
+    <a href="{{ url('/admin/input') }}" class="nav-link-admin">Admin Portal</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-decorative">
+    <div class="hero-logo-display">
+      <img src="{{ asset('logohunny.webp') }}" alt="Logo">
+    </div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <i class="fas fa-paw"></i>
+      Professional Pet Services
+    </div>
+    <h1 class="hero-title">
+      Kasih Sayang Terbaik<br>
+      Untuk <span class="text-accent">Anabul</span> Anda
+    </h1>
+    <p class="hero-desc">
+      Solusi manajemen perawatan hewan peliharaan terlengkap, mulai dari reservasi grooming hingga pengelolaan stok perlengkapan terbaik.
+    </p>
+    <div class="hero-actions">
+      <a href="admin.html" class="btn-hero-primary">
+        <i class="fas fa-th-large"></i>
+        Buka Dashboard
+      </a>
+      <a href="customer.html" class="btn-hero-secondary" style="text-decoration:none;">
+        Portal Customer <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="strip-stat">
+    <div class="strip-icon"><i class="fas fa-paw"></i></div>
+    <div class="strip-text">
+      <h3>500+</h3>
+      <p>Anabul Terawat</p>
+    </div>
+  </div>
+  <div class="strip-stat">
+    <div class="strip-icon"><i class="fas fa-star"></i></div>
+    <div class="strip-text">
+      <h3>4.8/5</h3>
+      <p>Rating Kepuasan</p>
+    </div>
+  </div>
+  <div class="strip-stat">
+    <div class="strip-icon"><i class="fas fa-shield-alt"></i></div>
+    <div class="strip-text">
+      <h3>100%</h3>
+      <p>Layanan Aman & Terpercaya</p>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="section-label">Layanan Kami</div>
+  <h2 class="section-title">Semua Kebutuhan Anabul<br>Dalam Satu Platform</h2>
+  <p class="section-desc">Dari grooming profesional hingga manajemen stok perlengkapan, kami hadir untuk memastikan anabul Anda mendapat perawatan terbaik.</p>
+
+  <div class="features-grid">
+    <div class="feature-card fade-in">
+      <div class="feature-icon"><i class="fas fa-cut"></i></div>
+      <h3>Grooming & Spa</h3>
+      <p>Layanan grooming profesional dengan berbagai paket, mulai dari mandi dasar hingga spa premium untuk anabul kesayangan Anda.</p>
+    </div>
+    <div class="feature-card fade-in fade-in-delay-1">
+      <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+      <h3>Sistem Reservasi</h3>
+      <p>Kelola jadwal dan antrean reservasi grooming secara efisien. Lacak setiap janji layanan dengan mudah dan terorganisir.</p>
+    </div>
+    <div class="feature-card fade-in fade-in-delay-2">
+      <div class="feature-icon"><i class="fas fa-boxes"></i></div>
+      <h3>Manajemen Inventaris</h3>
+      <p>Pantau stok perlengkapan perawatan secara real-time. Input barang baru dan kelola kategori dengan antarmuka yang intuitif.</p>
+    </div>
+    <div class="feature-card fade-in fade-in-delay-3">
+      <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+      <h3>Laporan & Statistik</h3>
+      <p>Dapatkan insight mendalam tentang performa bisnis melalui dashboard statistik yang informatif dan mudah dipahami.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="home-footer">
+  <span>&copy; 2024 <strong>Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+  <span>Dibuat dengan <i class="fas fa-heart" style="color:var(--accent)"></i> untuk para pecinta anabul</span>
+</footer>
+
+<script>
+  const nav = document.getElementById('homeNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+  nav.classList.add('scrolled'); // always show nav bg
+</script>
+<script src="{{ asset('app.js') }}"></script>
+</body>
+</html>
