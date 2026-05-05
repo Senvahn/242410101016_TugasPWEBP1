@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konfirmasi Pesanan | Hunny Pet Care</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="dash-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-brand">
+      <img src="logohunny.webp" alt="Logo Hunny">
+      <div class="sidebar-brand-text">
+        <span class="brand-name">Hunny Pet Care</span>
+        <span class="brand-sub">Admin Panel</span>
+      </div>
+    </a>
+    <nav class="sidebar-nav">
+      <span class="nav-label">Menu Utama</span>
+      <a href="admin.html" class="nav-item">
+        <i class="nav-icon fas fa-plus-circle"></i> Input Inventaris
+      </a>
+      <a href="reservasi.html" class="nav-item">
+        <i class="nav-icon fas fa-calendar-alt"></i> Reservasi
+      </a>
+      <a href="stokbarang.html" class="nav-item">
+        <i class="nav-icon fas fa-boxes"></i> Stok Barang
+      </a>
+      <a href="konfirmasipesanan.html" class="nav-item active">
+        <i class="nav-icon fas fa-clipboard-check"></i> Konfirmasi Pesanan
+      </a>
+      <span class="nav-label">Lainnya</span>
+      <a href="index.html" class="nav-item">
+        <i class="nav-icon fas fa-home"></i> Halaman Utama
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">H</div>
+        <div class="user-info">
+          <div class="user-name">Hunnnihunt</div>
+          <div class="user-role">Administrator</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <button class="hamburger" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+        <div class="topbar-left">
+          <h2>Konfirmasi Pesanan</h2>
+          <p>Pesanan masuk dari customer</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-badge">
+          <span class="dot"></span> Sistem Online
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="refreshOrders()">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+
+      <!-- STATS -->
+      <div class="stats-grid fade-in">
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fas fa-shopping-bag"></i></div>
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">Total Pesanan</div>
+          <div class="stat-change neutral"><i class="fas fa-list"></i> Semua pesanan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-clock"></i></div>
+          <div class="stat-value" id="statMenunggu">0</div>
+          <div class="stat-label">Menunggu Konfirmasi</div>
+          <div class="stat-change neutral"><i class="fas fa-hourglass-half"></i> Perlu tindakan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+          <div class="stat-value" id="statSelesai">0</div>
+          <div class="stat-label">Pesanan Selesai</div>
+          <div class="stat-change up"><i class="fas fa-arrow-up"></i> Terpenuhi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="stat-value" id="statPendapatan">Rp 0</div>
+          <div class="stat-label">Total Pendapatan</div>
+          <div class="stat-change up"><i class="fas fa-coins"></i> Pesanan selesai</div>
+        </div>
+      </div>
+
+      <!-- TABLE CARD -->
+      <div class="card fade-in fade-in-delay-1">
+        <div class="card-header">
+          <h3><i class="fas fa-clipboard-check" style="color:var(--accent);margin-right:8px;"></i>Daftar Pesanan Customer</h3>
+          <div class="filter-row">
+            <div class="search-bar">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Cari nama atau kode..." oninput="filterOrders(this.value)" id="searchInput">
+            </div>
+            <select class="action-select" id="filterStatus" onchange="filterByStatus(this.value)">
+              <option value="">Semua Status</option>
+              <option value="Menunggu Konfirmasi">Menunggu</option>
+              <option value="Diproses">Diproses</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Dibatalkan">Dibatalkan</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card-body" style="padding:0;">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Kode Pesanan</th>
+                  <th>Waktu</th>
+                  <th>Customer</th>
+                  <th>Metode Bayar</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tabelPesanan">
+              </tbody>
+            </table>
+          </div>
+          <div id="emptyState" class="empty-orders" style="display:none;">
+            <i class="fas fa-inbox"></i>
+            <p style="font-weight:600;color:var(--primary);margin-bottom:6px;">Belum Ada Pesanan</p>
+            <p style="font-size:0.85rem;">Pesanan dari customer akan muncul di sini setelah checkout.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end page-content -->
+
+    <!-- FOOTER -->
+    <footer class="page-footer">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-brand"><img src="logohunny.webp" alt="Logo"></div>
+          <h4>Hunny Pet Care</h4>
+          <p>Solusi manajemen perlengkapan anabul yang terpercaya.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Tautan Cepat</h4>
+          <a href="admin.html">Input Barang</a>
+          <a href="reservasi.html">Daftar Reservasi</a>
+          <a href="stokbarang.html">Lihat Stok</a>
+          <a href="konfirmasipesanan.html">Konfirmasi Pesanan</a>
+        </div>
+        <div class="footer-col">
+          <h4>Lokasi Kami</h4>
+          <p>Jl. Kucing Salto No. 67,<br>Kota Kucingwangy, Provinsi Bomboclat,<br>Anabulesia</p>
+          <p style="margin-top:10px;">Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2f475a4141565f4a5b4c4e5d4a6f48424e4643014c4042">[email&#160;protected]</a><br>WA: +62 812 3456 7890</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 <strong>Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+      </div>
+    </footer>
+
+  </div><!-- end main-content -->
+</div><!-- end dash-layout -->
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const DATA_KEY = 'konfirmasiPesanan';
+  let allOrders = [];
+  let activeStatusFilter = '';
+
+  function formatRp(n) {
+    return 'Rp ' + Number(n).toLocaleString('id-ID');
+  }
+
+  function showToast(msg, type='success') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i> ${msg}`;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  function getStatusClass(status) {
+    if (status === 'Menunggu Konfirmasi') return 'status-menunggu';
+    if (status === 'Diproses') return 'status-diproses';
+    if (status === 'Selesai') return 'status-selesai';
+    if (status === 'Dibatalkan') return 'status-dibatalkan';
+    return 'status-menunggu';
+  }
+
+  function getStatusIcon(status) {
+    if (status === 'Menunggu Konfirmasi') return 'fas fa-hourglass-half';
+    if (status === 'Diproses') return 'fas fa-spinner';
+    if (status === 'Selesai') return 'fas fa-check-circle';
+    if (status === 'Dibatalkan') return 'fas fa-times-circle';
+    return 'fas fa-circle';
+  }
+
+  function getMethodIcon(metode) {
+    if (metode.includes('QRIS')) return '🔳';
+    if (metode.includes('E-Wallet') || metode.includes('GoPay') || metode.includes('OVO') || metode.includes('DANA')) return '💳';
+    if (metode.includes('Tunai') || metode.includes('COD')) return '💵';
+    return '💰';
+  }
+
+  function updateStats(data) {
+    document.getElementById('statTotal').textContent = data.length;
+    document.getElementById('statMenunggu').textContent = data.filter(o => o.status === 'Menunggu Konfirmasi').length;
+    document.getElementById('statSelesai').textContent = data.filter(o => o.status === 'Selesai').length;
+    const pendapatan = data.filter(o => o.status === 'Selesai').reduce((s, o) => s + (Number(o.total) || 0), 0);
+    const pd = pendapatan >= 1000000
+      ? 'Rp ' + (pendapatan / 1000000).toFixed(1) + 'jt'
+      : formatRp(pendapatan);
+    document.getElementById('statPendapatan').textContent = pd;
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('tabelPesanan');
+    const empty = document.getElementById('emptyState');
+    tbody.innerHTML = '';
+
+    if (!data.length) {
+      empty.style.display = 'block';
+      updateStats(allOrders);
+      return;
+    }
+    empty.style.display = 'none';
+
+    data.forEach((order, i) => {
+      // FIX: indexOf fails because filtered objects are not same reference as allOrders.
+      // Match by kode (unique order code) instead.
+      const realIndex = allOrders.findIndex(x => x.kode === order.kode);
+      const statusClass = getStatusClass(order.status);
+      const statusIcon = getStatusIcon(order.status);
+      const methodIcon = getMethodIcon(order.metode || '');
+      const itemCount = order.items ? order.items.length : 0;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="color:var(--text-muted);font-size:0.8rem;">${String(i+1).padStart(2,'0')}</td>
+        <td>
+          <div>
+            <code style="background:var(--cream-dark);padding:3px 8px;border-radius:4px;font-size:0.78rem;font-weight:700;color:var(--primary);">${order.kode}</code>
+          </div>
+          <div style="margin-top:4px;">
+            <button class="btn btn-outline btn-sm" style="font-size:0.7rem;padding:3px 10px;" onclick="toggleDetail(${realIndex})">
+              <i class="fas fa-box" style="font-size:0.65rem;"></i> ${itemCount} item
+            </button>
+          </div>
+          <div class="order-detail-card" id="detail-${realIndex}">
+            ${renderDetailItems(order.items)}
+            <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:0.78rem;color:var(--text-muted);">
+              <strong style="color:var(--primary);">Alamat:</strong> ${order.alamat || '-'}<br>
+              <strong style="color:var(--primary);">WA:</strong> ${order.wa || '-'}
+            </div>
+          </div>
+        </td>
+        <td style="font-size:0.8rem;color:var(--text-muted);">${order.waktu || '-'}</td>
+        <td>
+          <div style="font-weight:600;font-size:0.875rem;color:var(--primary);">${order.nama}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">${order.wa || ''}</div>
+        </td>
+        <td>
+          <span class="method-tag">${methodIcon} ${order.metode || '-'}</span>
+        </td>
+        <td style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:var(--primary);">${formatRp(order.total)}</td>
+        <td>
+          <span class="status-badge ${statusClass}">
+            <i class="${statusIcon}" style="font-size:0.6rem;"></i> ${order.status}
+          </span>
+        </td>
+        <td>
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:130px;">
+            <select class="action-select" onchange="updateStatus(${realIndex}, this.value)">
+              <option value="" disabled ${!order.status ? 'selected' : ''}>Ubah Status</option>
+              <option value="Menunggu Konfirmasi" ${order.status==='Menunggu Konfirmasi'?'selected':''}>⏳ Menunggu</option>
+              <option value="Diproses" ${order.status==='Diproses'?'selected':''}>🔄 Diproses</option>
+              <option value="Selesai" ${order.status==='Selesai'?'selected':''}>✅ Selesai</option>
+              <option value="Dibatalkan" ${order.status==='Dibatalkan'?'selected':''}>❌ Dibatalkan</option>
+            </select>
+            <button class="btn btn-danger btn-sm" onclick="hapusPesanan(${realIndex})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateStats(allOrders);
+  }
+
+  function renderDetailItems(items) {
+    if (!items || items.length === 0) return '<p style="font-size:0.8rem;color:var(--text-muted);">Tidak ada item.</p>';
+    return items.map(item => `
+      <div class="detail-item-row">
+        <span>${item.nama} <span style="color:var(--accent);">×${item.qty}</span></span>
+        <strong>${formatRp((item.hargaNum || 0) * item.qty)}</strong>
+      </div>
+    `).join('');
+  }
+
+  function toggleDetail(index) {
+    const el = document.getElementById('detail-' + index);
+    if (el) el.classList.toggle('show');
+  }
+
+  function updateStatus(index, newStatus) {
+    if (!newStatus) return;
+    allOrders[index].status = newStatus;
+    localStorage.setItem(DATA_KEY, JSON.stringify(allOrders));
+    const filtered = getFiltered();
+    renderTable(filtered);
+    showToast('Status pesanan diperbarui: ' + newStatus, 'success');
+  }
+
+  async function hapusPesanan(index) {
+    if (!await confirm('Hapus pesanan ini dari daftar?')) return;
+    allOrders.splice(index, 1);
+    localStorage.setItem(DATA_KEY, JSON.stringify(allOrders));
+    const filtered = getFiltered();
+    renderTable(filtered);
+    showToast('Pesanan dihapus.', 'info');
+  }
+
+  function getFiltered() {
+    let data = allOrders;
+    if (activeStatusFilter) data = data.filter(o => o.status === activeStatusFilter);
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    if (q) {
+      data = data.filter(o =>
+        o.nama.toLowerCase().includes(q) ||
+        o.kode.toLowerCase().includes(q)
+      );
+    }
+    return data;
+  }
+
+  function filterOrders(q) {
+    renderTable(getFiltered());
+  }
+
+  function filterByStatus(val) {
+    activeStatusFilter = val;
+    document.getElementById('searchInput').value = '';
+    renderTable(getFiltered());
+  }
+
+  function refreshOrders() {
+    allOrders = JSON.parse(localStorage.getItem(DATA_KEY)) || [];
+    renderTable(getFiltered());
+    showToast('Data diperbarui.', 'info');
+  }
+
+  function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('open');
+  }
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // INIT
+  allOrders = JSON.parse(localStorage.getItem(DATA_KEY)) || [];
+  renderTable(allOrders);
+</script>
+<script src="app.js"></script>
+</body>
+</html>

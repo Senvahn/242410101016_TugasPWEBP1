@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Portal | Hunny Pet Care</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="cust-nav">
+  <a href="index.html" class="cust-nav-brand">
+    <img src="logohunny.webp" alt="Hunny Logo">
+    <span>Hunny Pet Care</span>
+  </a>
+  <div class="cust-nav-right">
+    <a href="index.html" class="cust-nav-tab">
+      <i class="fas fa-home"></i> Beranda
+    </a>
+    <a href="pesanansaya.html" class="cust-nav-tab">
+      <i class="fas fa-box"></i> Pesanan Saya
+    </a>
+    <button class="cart-btn" onclick="openCart()">
+      <i class="fas fa-shopping-bag"></i> Keranjang
+      <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="cust-hero">
+  <div class="cust-hero-content fade-in">
+    <div class="cust-hero-eyebrow">
+      <i class="fas fa-paw"></i> Customer Portal
+    </div>
+    <h1>Semua Kebutuhan <em>Anabul</em><br>Ada di Sini</h1>
+    <p>Beli peralatan grooming berkualitas atau pesan sesi grooming langsung dari sini. Mudah, cepat, dan terpercaya.</p>
+  </div>
+</section>
+
+<!-- TAB SWITCHER -->
+<div class="tab-switcher">
+  <button class="tab-btn active" onclick="switchTab('shop', this)">
+    <i class="fas fa-store"></i> Beli Peralatan
+  </button>
+  <button class="tab-btn" onclick="switchTab('reservasi', this)">
+    <i class="fas fa-calendar-check"></i> Pesan Reservasi
+  </button>
+</div>
+
+<!-- ============================================================
+     PANEL: SHOP
+============================================================ -->
+<div class="tab-panel active" id="panel-shop">
+  <div class="shop-toolbar">
+    <div class="shop-filters" id="filterChips">
+      <button class="shop-filter-chip active" onclick="filterShop('semua', this)">Semua</button>
+      <button class="shop-filter-chip" onclick="filterShop('Shampoo', this)">🧴 Shampoo</button>
+      <button class="shop-filter-chip" onclick="filterShop('Alat Cukur', this)">✂️ Alat Cukur</button>
+      <button class="shop-filter-chip" onclick="filterShop('Obat/Vitamin', this)">💊 Obat/Vitamin</button>
+      <button class="shop-filter-chip" onclick="filterShop('Aksesoris', this)">🎀 Aksesoris</button>
+    </div>
+    <div class="search-bar" style="max-width:240px;">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Cari produk..." oninput="searchShop(this.value)">
+    </div>
+  </div>
+
+  <div class="products-grid" id="productsGrid">
+    <!-- rendered by JS -->
+  </div>
+</div>
+
+<!-- ============================================================
+     PANEL: RESERVASI
+============================================================ -->
+<div class="tab-panel" id="panel-reservasi">
+  <div class="reserv-layout">
+
+    <!-- FORM SIDE -->
+    <div>
+      <!-- PACKAGES -->
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-header">
+          <h3><i class="fas fa-box-open" style="color:var(--accent);margin-right:8px;"></i>Pilih Paket Grooming</h3>
+        </div>
+        <div class="card-body">
+          <div class="package-cards" id="packageCards">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- RESERVATION FORM -->
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fas fa-calendar-plus" style="color:var(--accent);margin-right:8px;"></i>Detail Reservasi</h3>
+          <span class="badge badge-orange">Isi Data Anabul</span>
+        </div>
+        <div class="card-body">
+
+          <!-- SUCCESS SCREEN -->
+          <div class="success-screen" id="successScreen">
+            <div class="success-icon"><i class="fas fa-check"></i></div>
+            <h3>Reservasi Berhasil Dipesan! 🐾</h3>
+            <p>Terima kasih! Reservasi grooming anabulmu telah kami terima.</p>
+            <div class="booking-code" id="bookingCode">HPC-XXXXXX</div>
+            <p style="margin-bottom:20px;">Simpan kode ini sebagai referensi. Tim kami akan menghubungi kamu segera untuk konfirmasi.</p>
+            <button class="btn btn-accent" onclick="resetReservasi()">
+              <i class="fas fa-plus"></i> Buat Reservasi Baru
+            </button>
+          </div>
+
+          <form id="custReservasiForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Nama Lengkap <span style="color:var(--danger)">*</span></label>
+                <input type="text" name="nama" class="form-control" placeholder="Nama pemilik" required>
+              </div>
+              <div class="form-group">
+                <label>No. WhatsApp <span style="color:var(--danger)">*</span></label>
+                <input type="tel" name="wa" class="form-control" placeholder="+62 8xx xxxx xxxx" required>
+              </div>
+              <div class="form-group">
+                <label>Jenis Hewan <span style="color:var(--danger)">*</span></label>
+                <div class="animal-selector" id="animalSelector">
+                  <div class="animal-opt selected" onclick="selectAnimal(this, 'Anjing')">
+                    <span>🐶</span>Anjing
+                  </div>
+                  <div class="animal-opt" onclick="selectAnimal(this, 'Kucing')">
+                    <span>🐱</span>Kucing
+                  </div>
+                  <div class="animal-opt" onclick="selectAnimal(this, 'Lainnya')">
+                    <span>🐾</span>Lainnya
+                  </div>
+                </div>
+                <input type="hidden" name="hewan" id="hewanInput" value="Anjing">
+              </div>
+              <div class="form-group">
+                <label>Ras / Jenis <span style="color:var(--danger)">*</span></label>
+                <input type="text" name="ras" class="form-control" placeholder="cth. Husky, Persia" required>
+              </div>
+              <div class="form-group">
+                <label>Nama Hewan <span style="color:var(--danger)">*</span></label>
+                <input type="text" name="namaHewan" class="form-control" placeholder="Nama anabul" required>
+              </div>
+              <div class="form-group">
+                <label>Paket Terpilih</label>
+                <input type="text" name="paketTerpilih" id="paketDisplay" class="form-control" readonly value="Belum dipilih" style="cursor:default;background:var(--cream-dark);">
+              </div>
+              <div class="form-group">
+                <label>Tanggal Kunjungan <span style="color:var(--danger)">*</span></label>
+                <input type="date" name="tanggal" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Jam <span style="color:var(--danger)">*</span></label>
+                <select name="jam" class="form-control">
+                  <option>08:00</option>
+                  <option>09:00</option>
+                  <option>10:00</option>
+                  <option>11:00</option>
+                  <option>13:00</option>
+                  <option>14:00</option>
+                  <option>15:00</option>
+                  <option>16:00</option>
+                </select>
+              </div>
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label>Catatan Khusus</label>
+                <input type="text" name="catatan" class="form-control" placeholder="Alergi, kondisi kesehatan, atau permintaan khusus...">
+              </div>
+            </div>
+            <div style="margin-top:24px;display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;">
+              <button type="button" onclick="document.getElementById('custReservasiForm').reset();selectedPackage=null;updateSummary();" class="btn btn-outline">
+                <i class="fas fa-undo"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-accent" style="min-width:180px;">
+                <i class="fas fa-arrow-right"></i> Lanjut ke Pembayaran
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY SIDE -->
+    <div>
+      <div class="order-summary">
+        <div class="order-summary-header">
+          <i class="fas fa-receipt"></i> Ringkasan Pesanan
+        </div>
+        <div class="order-summary-body" id="orderSummaryBody">
+          <div style="text-align:center;padding:30px 10px;color:var(--text-muted);">
+            <i class="fas fa-paw" style="font-size:2rem;opacity:0.2;display:block;margin-bottom:12px;"></i>
+            <p style="font-size:0.85rem;">Pilih paket dan isi form untuk melihat ringkasan.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO BOX -->
+      <div class="card" style="margin-top:20px;">
+        <div class="card-body">
+          <h4 style="font-family:'Playfair Display',serif;color:var(--primary);margin-bottom:14px;font-size:0.95rem;">
+            <i class="fas fa-info-circle" style="color:var(--accent);margin-right:6px;"></i> Info Penting
+          </h4>
+          <div style="font-size:0.8rem;color:var(--text-muted);line-height:2;">
+            ✅ Konfirmasi via WhatsApp dalam 1x24 jam<br>
+            🕐 Layanan tersedia Senin–Sabtu, 08:00–17:00<br>
+            🐾 Bawa buku vaksin jika ada<br>
+            ❌ Tidak menerima hewan sakit menular<br>
+            📞 WA: +62 812 3456 7890
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="handleCartOverlayClick(event)">
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <h3><i class="fas fa-shopping-bag"></i> Keranjang Belanja</h3>
+      <button onclick="closeCart()" style="background:rgba(255,255,255,0.15);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="cart-drawer-body" id="cartBody">
+      <!-- rendered by JS -->
+    </div>
+    <div class="cart-drawer-footer">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cartTotal">Rp 0</span>
+      </div>
+      <button class="btn btn-accent" style="width:100%;justify-content:center;" onclick="checkout()">
+        <i class="fas fa-credit-card"></i> Checkout Sekarang
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT SUCCESS MODAL -->
+<div class="modal-overlay" id="checkoutModal" style="display:none;">
+  <div class="modal checkout-modal">
+    <div style="text-align:center;padding:20px 0 10px;">
+      <div class="success-icon" style="margin:0 auto 20px;">
+        <i class="fas fa-check"></i>
+      </div>
+      <h3 style="font-family:'Playfair Display',serif;color:var(--primary);font-size:1.3rem;margin-bottom:10px;">Pesanan Dikonfirmasi!</h3>
+      <p style="color:var(--text-muted);font-size:0.875rem;line-height:1.8;margin-bottom:16px;">
+        Terima kasih sudah berbelanja di Hunny Pet Care! Tim kami akan segera menghubungi kamu untuk proses pengiriman.
+      </p>
+      <div class="booking-code" id="orderCode">ORD-XXXXXX</div>
+      <p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:24px;">Simpan kode order ini sebagai referensi.</p>
+      <button class="btn btn-accent" style="justify-content:center;" onclick="closeCheckoutModal()">
+        <i class="fas fa-arrow-left"></i> Lanjut Belanja
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- FOOTER -->
+<footer class="page-footer" style="margin-left:0;">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-brand"><img src="logohunny.webp" alt="Logo"></div>
+      <h4>Hunny Pet Care</h4>
+      <p>Kasih sayang terbaik untuk anabul kesayangan Anda.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Layanan</h4>
+      <a href="javascript:void(0)" onclick="switchTabByName('shop')">Beli Peralatan</a>
+      <a href="javascript:void(0)" onclick="switchTabByName('reservasi')">Pesan Grooming</a>
+      <a href="index.html">Beranda</a>
+    </div>
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <p>Jl. Kucing Salto No. 67,<br>Kota Kucingwangy</p>
+      <p style="margin-top:10px;">WA: +62 812 3456 7890<br>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cda5b8a3a3b4bda8b9aeacbfa88daaa0aca4a1e3aea2a0">[email&#160;protected]</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2024 <strong>Hunny Pet Care</strong>. Hak Cipta Dilindungi.</span>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ======== EMOJI ICON MAP ========
+const CATEGORY_ICONS = {
+  'Shampoo': '🧴',
+  'Alat Cukur': '✂️',
+  'Obat/Vitamin': '💊',
+  'Aksesoris': '🎀',
+  'Elektronik': '🔌',
+};
+
+// ======== PACKAGES ========
+const PACKAGES = [
+  {
+    id: 'basic',
+    name: 'Paket Basic',
+    price: 80000,
+    icon: '🛁',
+    includes: 'Mandi + Blow dry + Parfum ringan'
+  },
+  {
+    id: 'deluxe',
+    name: 'Paket Deluxe',
+    price: 150000,
+    icon: '✨',
+    includes: 'Basic + Potong kuku + Sikat gigi + Ear cleaning'
+  },
+  {
+    id: 'spa',
+    name: 'Paket Spa',
+    price: 250000,
+    icon: '💆',
+    includes: 'Deluxe + Mandi herbal + Masker bulu + Vitamin kulit'
+  },
+  {
+    id: 'premium',
+    name: 'Paket Premium',
+    price: 350000,
+    icon: '👑',
+    includes: 'Spa + Potong bulu stylish + Bandana + Foto sesi'
+  },
+];
+
+// ======== STATE ========
+let cart = JSON.parse(localStorage.getItem('custCart')) || [];
+let selectedPackage = null;
+let selectedAnimal = 'Anjing';
+let activeFilter = 'semua';
+let searchQuery = '';
+
+function formatRp(num) {
+  return 'Rp ' + num.toLocaleString('id-ID');
+}
+
+// ======== TOAST ========
+function showToast(msg, type = 'success') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'info' ? 'info-circle' : 'exclamation-circle'}"></i> ${msg}`;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ======== TAB ========
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function switchTabByName(name) {
+  const btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(b => {
+    if (b.textContent.includes(name === 'shop' ? 'Peralatan' : 'Reservasi')) {
+      switchTab(name, b);
+    }
+  });
+}
+
+// ======== SHOP ========
+function getStok() {
+  return JSON.parse(localStorage.getItem('stokBarang')) || [];
+}
+
+function getDisplayProducts() {
+  const raw = getStok();
+  let products = raw.filter(p => parseInt(p.jumlah) > 0 || true); // show all
+
+  if (activeFilter !== 'semua') {
+    products = products.filter(p => p.kategori === activeFilter);
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    products = products.filter(p =>
+      p.nama.toLowerCase().includes(q) || p.kategori.toLowerCase().includes(q)
+    );
+  }
+  return products;
+}
+
+function renderShop() {
+  const grid = document.getElementById('productsGrid');
+  const products = getDisplayProducts();
+  const stok = getStok();
+
+  if (stok.length === 0) {
+    grid.innerHTML = `
+      <div class="shop-empty">
+        <i class="fas fa-box-open"></i>
+        <p style="font-size:1rem;font-weight:600;color:var(--primary);margin-bottom:8px;">Belum Ada Produk</p>
+        <p style="font-size:0.875rem;">Admin belum menambahkan produk ke stok.</p>
+      </div>`;
+    return;
+  }
+
+  if (products.length === 0) {
+    grid.innerHTML = `
+      <div class="shop-empty">
+        <i class="fas fa-search"></i>
+        <p style="font-size:1rem;font-weight:600;color:var(--primary);margin-bottom:8px;">Produk Tidak Ditemukan</p>
+        <p style="font-size:0.875rem;">Coba filter atau kata kunci yang berbeda.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = products.map((p, idx) => {
+    const icon = CATEGORY_ICONS[p.kategori] || '📦';
+    const jumlah = parseInt(p.jumlah) || 0;
+    const soldOut = jumlah === 0;
+    const lowStock = jumlah > 0 && jumlah <= 5;
+    const hargaNum = parseInt(String(p.harga).replace(/[^0-9]/g, '')) || 0;
+
+    return `
+      <div class="product-card-shop fade-in" style="animation-delay:${idx * 0.05}s">
+        <div class="product-thumb">
+          <span>${icon}</span>
+          ${soldOut ? '<div class="product-badge sold-out">Habis</div>' : ''}
+          ${lowStock && !soldOut ? '<div class="product-badge">Stok Terbatas</div>' : ''}
+        </div>
+        <div class="product-info">
+          <div class="product-category">${p.kategori}</div>
+          <div class="product-name">${p.nama}</div>
+          <div class="product-unit">per ${p.satuan || 'pcs'} · Kode: ${p.kode}</div>
+          <div class="product-price-row">
+            <div class="product-price">${hargaNum > 0 ? formatRp(hargaNum) : p.harga || '-'}</div>
+            <button class="add-to-cart-btn" onclick="addToCart(${JSON.stringify(p).replace(/"/g, '&quot;')})"
+              ${soldOut ? 'disabled' : ''} title="${soldOut ? 'Stok habis' : 'Tambah ke keranjang'}">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="stok-label ${soldOut ? 'empty' : lowStock ? 'low' : ''}">
+            <i class="fas fa-circle" style="font-size:0.5rem;"></i>
+            ${soldOut ? 'Stok habis' : `Stok: ${jumlah} ${p.satuan || 'pcs'}`}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterShop(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.shop-filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderShop();
+}
+
+function searchShop(q) {
+  searchQuery = q;
+  renderShop();
+}
+
+// ======== CART ========
+function addToCart(product) {
+  const hargaNum = parseInt(String(product.harga).replace(/[^0-9]/g, '')) || 0;
+  const existing = cart.find(i => i.kode === product.kode);
+
+  const stokItems = getStok();
+  const stokItem = stokItems.find(s => s.kode === product.kode);
+  const maxStok = parseInt(stokItem?.jumlah) || 0;
+  const inCart = existing ? existing.qty : 0;
+
+  if (inCart >= maxStok) {
+    showToast('Stok tidak mencukupi!', 'error');
+    return;
+  }
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ ...product, qty: 1, hargaNum });
+  }
+
+  localStorage.setItem('custCart', JSON.stringify(cart));
+  updateCartBadge();
+  renderCartBody();
+  showToast(`${product.nama} ditambahkan ke keranjang!`);
+}
+
+function removeFromCart(kode) {
+  cart = cart.filter(i => i.kode !== kode);
+  localStorage.setItem('custCart', JSON.stringify(cart));
+  updateCartBadge();
+  renderCartBody();
+}
+
+function updateQty(kode, delta) {
+  const item = cart.find(i => i.kode === kode);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+
+  const stokItems = getStok();
+  const stokItem = stokItems.find(s => s.kode === kode);
+  const maxStok = parseInt(stokItem?.jumlah) || 0;
+  if (item.qty > maxStok) {
+    item.qty = maxStok;
+    showToast('Stok tidak mencukupi!', 'error');
+  }
+
+  localStorage.setItem('custCart', JSON.stringify(cart));
+  updateCartBadge();
+  renderCartBody();
+}
+
+function updateCartBadge() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = total;
+  badge.style.display = total > 0 ? 'flex' : 'none';
+}
+
+function renderCartBody() {
+  const body = document.getElementById('cartBody');
+  const totalEl = document.getElementById('cartTotal');
+
+  if (cart.length === 0) {
+    body.innerHTML = `
+      <div class="cart-empty">
+        <i class="fas fa-shopping-bag"></i>
+        <p>Keranjang masih kosong.<br>Yuk tambahkan produk dulu!</p>
+      </div>`;
+    totalEl.textContent = 'Rp 0';
+    return;
+  }
+
+  let totalPrice = 0;
+  body.innerHTML = cart.map(item => {
+    const icon = CATEGORY_ICONS[item.kategori] || '📦';
+    const subtotal = item.hargaNum * item.qty;
+    totalPrice += subtotal;
+    return `
+      <div class="cart-item">
+        <div class="cart-item-icon">${icon}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.nama}</div>
+          <div class="cart-item-price">${formatRp(item.hargaNum)} × ${item.qty}</div>
+        </div>
+        <div class="cart-qty-ctrl">
+          <button class="qty-btn" onclick="updateQty('${item.kode}', -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty('${item.kode}', 1)">+</button>
+          <button class="qty-btn" style="border-color:var(--danger);color:var(--danger);" onclick="removeFromCart('${item.kode}')">
+            <i class="fas fa-trash" style="font-size:0.7rem;"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  totalEl.textContent = formatRp(totalPrice);
+}
+
+function openCart() {
+  renderCartBody();
+  document.getElementById('cartOverlay').classList.add('open');
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+}
+
+function handleCartOverlayClick(e) {
+  if (e.target === document.getElementById('cartOverlay')) closeCart();
+}
+
+function checkout() {
+  if (cart.length === 0) {
+    showToast('Keranjang masih kosong!', 'error');
+    return;
+  }
+  // Generate order code
+  const code = 'ORD-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+  // Save pending order to localStorage (stock will be reduced after payment confirmed)
+  const pendingOrder = {
+    kode: code,
+    items: cart,
+    total: cart.reduce((s, i) => s + (i.hargaNum * i.qty), 0),
+    waktu: new Date().toISOString()
+  };
+  localStorage.setItem('pendingOrder', JSON.stringify(pendingOrder));
+
+  closeCart();
+  // Redirect to payment method page
+  window.location.href = 'metodepembayaran.html';
+}
+
+function closeCheckoutModal() {
+  const modal = document.getElementById('checkoutModal');
+  modal.classList.remove('open');
+  setTimeout(() => { modal.style.display = 'none'; }, 250);
+}
+
+// ======== PACKAGES ========
+function renderPackages() {
+  const container = document.getElementById('packageCards');
+  container.innerHTML = PACKAGES.map(pkg => `
+    <div class="pkg-card" id="pkg-${pkg.id}" onclick="selectPackage('${pkg.id}')">
+      <div class="pkg-check"><i class="fas fa-check"></i></div>
+      <div class="pkg-icon">${pkg.icon}</div>
+      <div class="pkg-name">${pkg.name}</div>
+      <div class="pkg-price">${formatRp(pkg.price)}</div>
+      <div class="pkg-includes">${pkg.includes}</div>
+    </div>
+  `).join('');
+}
+
+function selectPackage(id) {
+  selectedPackage = PACKAGES.find(p => p.id === id);
+  document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('pkg-' + id).classList.add('selected');
+  document.getElementById('paketDisplay').value = selectedPackage.name + ' — ' + formatRp(selectedPackage.price);
+  updateSummary();
+}
+
+// ======== ANIMAL SELECTOR ========
+function selectAnimal(el, val) {
+  document.querySelectorAll('.animal-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAnimal = val;
+  document.getElementById('hewanInput').value = val;
+  updateSummary();
+}
+
+// ======== ORDER SUMMARY ========
+function updateSummary() {
+  const body = document.getElementById('orderSummaryBody');
+  const form = document.getElementById('custReservasiForm');
+  const nama = form ? form.querySelector('[name="nama"]').value : '';
+  const tanggal = form ? form.querySelector('[name="tanggal"]').value : '';
+  const jam = form ? form.querySelector('[name="jam"]').value : '';
+
+  if (!selectedPackage) {
+    body.innerHTML = `
+      <div style="text-align:center;padding:30px 10px;color:var(--text-muted);">
+        <i class="fas fa-paw" style="font-size:2rem;opacity:0.2;display:block;margin-bottom:12px;"></i>
+        <p style="font-size:0.85rem;">Pilih paket grooming terlebih dahulu.</p>
+      </div>`;
+    return;
+  }
+
+  body.innerHTML = `
+    <div class="summary-row"><span>Paket</span><span style="font-weight:600;color:var(--primary);">${selectedPackage.name}</span></div>
+    <div class="summary-row"><span>Hewan</span><span>${selectedAnimal || '-'}</span></div>
+    <div class="summary-row"><span>Tanggal</span><span>${tanggal || '-'}</span></div>
+    <div class="summary-row"><span>Jam</span><span>${jam || '-'}</span></div>
+    <div class="summary-row"><span>Pemilik</span><span>${nama || '-'}</span></div>
+    <div class="summary-row total"><span>Total Bayar</span><span style="color:var(--accent);">${formatRp(selectedPackage.price)}</span></div>
+    <p style="font-size:0.72rem;color:var(--text-muted);margin-top:12px;line-height:1.6;">* Kamu akan diarahkan ke halaman pembayaran setelah mengisi form ini.</p>
+  `;
+}
+
+// ======== RESERVASI FORM ========
+document.getElementById('custReservasiForm').addEventListener('input', updateSummary);
+
+document.getElementById('custReservasiForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!selectedPackage) {
+    showToast('Pilih paket grooming terlebih dahulu!', 'error');
+    return;
+  }
+
+  // Generate booking code
+  const code = 'HPC-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+  const pendingReservasi = {
+    kode: code,
+    tipe: 'reservasi',
+    tanggal: this.tanggal.value,
+    jam: this.jam.value,
+    pemilik: this.nama.value,
+    wa: this.wa.value,
+    hewan: selectedAnimal + ' (' + this.ras.value + ')',
+    namaHewan: this.namaHewan.value,
+    paket: selectedPackage.name,
+    detail: this.catatan.value || selectedPackage.includes,
+    harga: formatRp(selectedPackage.price),
+    total: selectedPackage.price,
+    waktu: new Date().toISOString()
+  };
+
+  localStorage.setItem('pendingReservasi', JSON.stringify(pendingReservasi));
+
+  // Redirect to payment
+  window.location.href = 'metodepembayaran.html';
+});
+
+function resetReservasi() {
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('custReservasiForm').style.display = 'grid';
+  document.getElementById('custReservasiForm').reset();
+  document.getElementById('custReservasiForm').style.display = '';
+  selectedPackage = null;
+  selectedAnimal = 'Anjing';
+  document.querySelectorAll('.animal-opt').forEach((o, i) => {
+    o.classList.toggle('selected', i === 0);
+  });
+  document.getElementById('hewanInput').value = 'Anjing';
+  document.getElementById('paketDisplay').value = 'Belum dipilih';
+  document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+  updateSummary();
+}
+
+// ======== SET DEFAULT DATE ========
+window.addEventListener('DOMContentLoaded', () => {
+  const dateInput = document.querySelector('[name="tanggal"]');
+  if (dateInput) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().split('T')[0];
+  }
+
+  renderPackages();
+  renderShop();
+  updateCartBadge();
+  renderCartBody();
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>

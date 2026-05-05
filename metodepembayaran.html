@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metode Pembayaran | Hunny Pet Care</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="pay-nav">
+  <a href="customer.html" class="pay-nav-brand">
+    <img src="logohunny.webp" alt="Logo Hunny">
+    <span>Hunny Pet Care</span>
+  </a>
+  <a href="customer.html" class="btn btn-outline btn-sm">
+    <i class="fas fa-arrow-left"></i> Kembali Belanja
+  </a>
+</nav>
+ 
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Beranda</a>
+  <i class="fas fa-chevron-right"></i>
+  <a href="customer.html">Belanja</a>
+  <i class="fas fa-chevron-right"></i>
+  <span>Metode Pembayaran</span>
+</div>
+ 
+<!-- MAIN -->
+<div class="pay-wrapper">
+ 
+  <!-- LEFT: FORM -->
+  <div>
+    <!-- STEPS -->
+    <div class="steps">
+      <div class="step done">
+        <div class="step-num"><i class="fas fa-check" style="font-size:0.7rem;"></i></div>
+        <div class="step-label">Keranjang</div>
+      </div>
+      <div class="step-divider"></div>
+      <div class="step active">
+        <div class="step-num">2</div>
+        <div class="step-label">Pembayaran</div>
+      </div>
+      <div class="step-divider"></div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-label">Konfirmasi</div>
+      </div>
+    </div>
+ 
+    <!-- DATA CUSTOMER -->
+    <div class="cust-form-card" style="margin-bottom:20px;">
+      <div class="cust-form-header">
+        <i class="fas fa-user"></i> Data Pemesan
+      </div>
+      <div class="cust-form-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nama Lengkap <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="custNama" class="form-control" placeholder="Nama kamu" required>
+          </div>
+          <div class="form-group">
+            <label>No. WhatsApp <span style="color:var(--danger)">*</span></label>
+            <input type="tel" id="custWa" class="form-control" placeholder="+62 8xx xxxx xxxx" required>
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;" id="alamatGroup">
+            <label>Alamat Pengiriman <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="custAlamat" class="form-control" placeholder="Jl. contoh No. 1, Kota...">
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- METODE PEMBAYARAN -->
+    <div class="section-head">
+      <h2><i class="fas fa-credit-card" style="color:var(--accent);margin-right:10px;"></i>Pilih Metode Pembayaran</h2>
+      <p>Pilih cara pembayaran yang paling nyaman untuk kamu.</p>
+    </div>
+ 
+    <div class="method-cards">
+ 
+      <!-- QRIS -->
+      <div class="method-card" id="card-qris" onclick="selectMethod('qris')">
+        <div class="method-radio" id="radio-qris"></div>
+        <div class="method-icon-wrap" id="icon-qris">🔳</div>
+        <div class="method-info">
+          <div class="method-name">QRIS</div>
+          <div class="method-desc">Scan QR Code menggunakan aplikasi bank atau dompet digital apapun.</div>
+        </div>
+        <span class="method-badge">Instant</span>
+        <div class="method-detail" id="detail-qris">
+          <div class="qris-box">
+            <div class="qris-img">
+              <!-- QR Code SVG placeholder -->
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100" height="100" fill="white"/>
+                <!-- Position Detection Patterns -->
+                <rect x="5" y="5" width="25" height="25" fill="none" stroke="#1a2b3c" stroke-width="3"/>
+                <rect x="10" y="10" width="15" height="15" fill="#1a2b3c"/>
+                <rect x="70" y="5" width="25" height="25" fill="none" stroke="#1a2b3c" stroke-width="3"/>
+                <rect x="75" y="10" width="15" height="15" fill="#1a2b3c"/>
+                <rect x="5" y="70" width="25" height="25" fill="none" stroke="#1a2b3c" stroke-width="3"/>
+                <rect x="10" y="75" width="15" height="15" fill="#1a2b3c"/>
+                <!-- Data modules (simplified pattern) -->
+                <rect x="35" y="5" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="45" y="5" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="55" y="5" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="35" y="15" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="55" y="15" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="35" y="25" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="45" y="25" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="5" y="35" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="15" y="35" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="35" y="35" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="50" y="35" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="65" y="35" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="80" y="35" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="90" y="35" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="5" y="45" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="25" y="45" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="40" y="45" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="60" y="45" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="75" y="45" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="90" y="45" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="5" y="55" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="20" y="55" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="35" y="55" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="55" y="55" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="70" y="55" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="85" y="55" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="35" y="70" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="50" y="70" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="65" y="70" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="80" y="70" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="35" y="80" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="45" y="80" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="60" y="80" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="90" y="80" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="35" y="90" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="55" y="90" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="70" y="90" width="5" height="5" fill="#1a2b3c"/>
+                <rect x="85" y="90" width="5" height="5" fill="#1a2b3c"/>
+                <!-- Center logo hint -->
+                <rect x="43" y="43" width="14" height="14" rx="3" fill="#c9894a"/>
+                <text x="50" y="53" text-anchor="middle" fill="white" font-size="9" font-weight="bold">H</text>
+              </svg>
+            </div>
+            <div class="qris-merchant">Hunny Pet Care</div>
+            <div class="qris-label">Scan QR di atas menggunakan<br>m-Banking, GoPay, OVO, DANA, dll.</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);background:var(--white);border-radius:6px;padding:8px 14px;border:1px solid var(--border);">
+              ID: <strong style="color:var(--primary);">QRIS.HUNNY.PETCARE.ID</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- E-WALLET -->
+      <div class="method-card" id="card-ewallet" onclick="selectMethod('ewallet')">
+        <div class="method-radio" id="radio-ewallet"></div>
+        <div class="method-icon-wrap" id="icon-ewallet">💳</div>
+        <div class="method-info">
+          <div class="method-name">E-Wallet</div>
+          <div class="method-desc">Transfer via GoPay, OVO, atau DANA langsung ke akun Hunny Pet Care.</div>
+        </div>
+        <span class="method-badge">Transfer</span>
+        <div class="method-detail" id="detail-ewallet">
+          <div style="margin-bottom:12px;font-size:0.82rem;font-weight:600;color:var(--primary);">Pilih E-Wallet:</div>
+          <div class="wallet-options">
+            <div class="wallet-opt" onclick="selectWallet('gopay', '+62 812 3456 7890', this)">
+              <span class="wallet-icon">💚</span>
+              <div class="wallet-name">GoPay</div>
+            </div>
+            <div class="wallet-opt" onclick="selectWallet('ovo', '+62 812 3456 7890', this)">
+              <span class="wallet-icon">💜</span>
+              <div class="wallet-name">OVO</div>
+            </div>
+            <div class="wallet-opt" onclick="selectWallet('dana', '+62 812 3456 7890', this)">
+              <span class="wallet-icon">💙</span>
+              <div class="wallet-name">DANA</div>
+            </div>
+          </div>
+          <div class="wallet-number" id="walletNumber">
+            Transfer ke nomor: <strong id="walletNumberText">-</strong><br>
+            <span style="font-size:0.75rem;color:var(--text-muted);">a.n. <strong>Hunny Pet Care</strong></span>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- TUNAI -->
+      <div class="method-card" id="card-tunai" onclick="selectMethod('tunai')">
+        <div class="method-radio" id="radio-tunai"></div>
+        <div class="method-icon-wrap" id="icon-tunai">💵</div>
+        <div class="method-info">
+          <div class="method-name">Tunai (Cash)</div>
+          <div class="method-desc">Bayar tunai saat barang tiba atau saat kunjungan ke toko kami.</div>
+        </div>
+        <span class="method-badge" style="background:rgba(201,137,74,0.1);color:var(--accent);border-color:rgba(201,137,74,0.25);">COD</span>
+        <div class="method-detail" id="detail-tunai">
+          <div class="tunai-info">
+            <div class="tunai-row">
+              <div class="tunai-icon"><i class="fas fa-store"></i></div>
+              <div>
+                <div style="font-weight:600;color:var(--primary);font-size:0.85rem;margin-bottom:2px;">Bayar di Toko</div>
+                <div>Datang langsung ke toko dan bayar saat pengambilan barang.</div>
+              </div>
+            </div>
+            <div class="tunai-row">
+              <div class="tunai-icon"><i class="fas fa-truck"></i></div>
+              <div>
+                <div style="font-weight:600;color:var(--primary);font-size:0.85rem;margin-bottom:2px;">COD (Cash on Delivery)</div>
+                <div>Bayar tunai kepada kurir saat barang diterima. Siapkan uang pas.</div>
+              </div>
+            </div>
+            <div class="tunai-row">
+              <div class="tunai-icon"><i class="fas fa-clock"></i></div>
+              <div>
+                <div style="font-weight:600;color:var(--primary);font-size:0.85rem;margin-bottom:2px;">Estimasi</div>
+                <div>Pesanan diproses setelah konfirmasi admin. Siapkan pembayaran sesuai total.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+    </div>
+ 
+    <!-- BAYAR BUTTON -->
+    <button class="btn btn-accent" style="width:100%;justify-content:center;padding:16px;font-size:1rem;" onclick="submitPembayaran()">
+      <i class="fas fa-lock"></i> Konfirmasi & Bayar Sekarang
+    </button>
+    <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:10px;">
+      <i class="fas fa-shield-alt" style="color:var(--success);"></i> Pesananmu aman & dilindungi
+    </p>
+  </div>
+ 
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="order-card">
+    <div class="order-card-header">
+      <i class="fas fa-receipt"></i> Ringkasan Pesanan
+    </div>
+    <div class="order-card-body">
+      <div id="orderItems">
+        <!-- filled by JS -->
+      </div>
+      <div class="order-total-row">
+        <span>Total</span>
+        <span id="orderTotal">Rp 0</span>
+      </div>
+      <div style="margin-top:16px;font-size:0.75rem;color:var(--text-muted);line-height:1.8;background:var(--cream);padding:12px;border-radius:var(--radius-sm);">
+        🛡️ Pembayaran dijamin aman<br>
+        📦 Proses setelah konfirmasi admin<br>
+        📞 WA: +62 812 3456 7890
+      </div>
+    </div>
+  </div>
+ 
+</div><!-- end pay-wrapper -->
+ 
+<!-- KONFIRMASI BAYAR MODAL -->
+<div class="modal-overlay" id="confirmModal" style="display:none;">
+  <div class="modal" style="max-width:420px;text-align:center;">
+    <div class="modal-header" style="justify-content:center;border-bottom:none;padding-bottom:0;">
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(201,137,74,0.12);border:2px solid rgba(201,137,74,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:1.8rem;">💳</div>
+    </div>
+    <div style="padding:0 28px 28px;">
+      <h3 style="font-family:'Playfair Display',serif;color:var(--primary);font-size:1.2rem;margin-bottom:8px;">Konfirmasi Pembayaran</h3>
+      <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.8;margin-bottom:6px;">Yakin ingin melanjutkan pembayaran?</p>
+      <div style="background:var(--cream-dark);border-radius:var(--radius-sm);padding:14px 18px;margin:16px 0;text-align:left;">
+        <div style="display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:6px;">
+          <span style="color:var(--text-muted);">Metode</span>
+          <span style="font-weight:600;color:var(--primary);" id="confirmMethodText">-</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.83rem;">
+          <span style="color:var(--text-muted);">Total Bayar</span>
+          <span style="font-weight:700;color:var(--accent);font-family:'Playfair Display',serif;" id="confirmTotalText">Rp 0</span>
+        </div>
+      </div>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:20px;">Pesanan akan diproses setelah admin mengkonfirmasi pembayaranmu.</p>
+      <div style="display:flex;gap:12px;">
+        <button class="btn btn-outline" style="flex:1;justify-content:center;" onclick="closeConfirmModal()">
+          <i class="fas fa-times"></i> Batal
+        </button>
+        <button class="btn btn-accent" style="flex:1;justify-content:center;" onclick="prosesPayment()">
+          <i class="fas fa-check"></i> Ya, Bayar!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-anim"><i class="fas fa-check"></i></div>
+    <h3>Pesanan Berhasil! 🎉</h3>
+    <p>Pembayaran kamu telah kami catat. Admin akan segera memproses pesananmu.</p>
+    <div class="order-code-display" id="finalOrderCode">ORD-XXXXXX</div>
+    <div class="method-confirm-tag" id="methodConfirmTag">
+      <i class="fas fa-check-circle"></i> <span id="methodConfirmText">-</span>
+    </div>
+    <p style="margin-bottom:24px;">Simpan kode pesanan ini. Tim kami akan menghubungi kamu via WhatsApp untuk konfirmasi.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <a href="pesanansaya.html" class="btn btn-accent" style="justify-content:center;display:flex;">
+        <i class="fas fa-list-alt"></i> Cek Status Pesanan
+      </a>
+      <a href="customer.html" class="btn btn-outline" style="justify-content:center;display:flex;">
+        <i class="fas fa-home"></i> Kembali ke Toko
+      </a>
+    </div>
+  </div>
+</div>
+ 
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+ 
+<script>
+  let selectedMethod = '';
+  let selectedWalletName = '';
+  let pendingOrder = null;
+  let pendingReservasi = null;
+  let orderType = 'shop'; // 'shop' | 'reservasi'
+ 
+  function formatRp(n) {
+    return 'Rp ' + Number(n).toLocaleString('id-ID');
+  }
+ 
+  function showToast(msg, type='success') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i> ${msg}`;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+ 
+  function loadOrder() {
+    pendingReservasi = JSON.parse(localStorage.getItem('pendingReservasi'));
+    pendingOrder = JSON.parse(localStorage.getItem('pendingOrder'));
+ 
+    // BUG FIX: determine type by comparing timestamps so the most recent action wins.
+    // This prevents a stale pendingReservasi from hijacking a shop checkout.
+    const resTime = pendingReservasi && pendingReservasi.waktu ? new Date(pendingReservasi.waktu).getTime() : 0;
+    const ordTime = pendingOrder && pendingOrder.waktu ? new Date(pendingOrder.waktu).getTime() : 0;
+ 
+    const hasReservasi = pendingReservasi && pendingReservasi.tipe === 'reservasi';
+    const hasShop = pendingOrder && pendingOrder.items && pendingOrder.items.length > 0;
+ 
+    if (hasReservasi && hasShop) {
+      // Both exist — use whichever is newer
+      if (resTime >= ordTime) {
+        orderType = 'reservasi';
+        renderReservasiSummary();
+        prefillCustomerFromReservasi();
+      } else {
+        orderType = 'shop';
+        renderShopSummary();
+      }
+    } else if (hasReservasi) {
+      orderType = 'reservasi';
+      renderReservasiSummary();
+      prefillCustomerFromReservasi();
+    } else if (hasShop) {
+      orderType = 'shop';
+      renderShopSummary();
+    } else {
+      document.getElementById('orderItems').innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:20px 0;">Tidak ada pesanan ditemukan.</p>';
+    }
+  }
+ 
+  function prefillCustomerFromReservasi() {
+    if (!pendingReservasi) return;
+    const namaEl = document.getElementById('custNama');
+    const waEl = document.getElementById('custWa');
+    if (namaEl && pendingReservasi.pemilik) namaEl.value = pendingReservasi.pemilik;
+    if (waEl && pendingReservasi.wa) waEl.value = pendingReservasi.wa;
+ 
+    // For reservasi, hide alamat (not needed) and show note instead
+    const alamatGroup = document.getElementById('alamatGroup');
+    if (alamatGroup) {
+      alamatGroup.style.display = 'none';
+    }
+    // Update breadcrumb label
+    const pageTitle = document.querySelector('.section-head h2');
+    if (pageTitle) pageTitle.innerHTML = '<i class="fas fa-credit-card" style="color:var(--accent);margin-right:10px;"></i>Pilih Metode Pembayaran Reservasi';
+    // Update tunai description for reservasi context
+    const tunaiDesc = document.querySelector('#card-tunai .method-desc');
+    if (tunaiDesc) tunaiDesc.textContent = 'Bayar tunai saat tiba di toko pada jadwal reservasi.';
+  }
+ 
+  function renderReservasiSummary() {
+    const r = pendingReservasi;
+    const html = `
+      <div class="order-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <div class="order-item-name">🐾 ${r.paket}</div>
+          <div class="order-item-price">${formatRp(r.total)}</div>
+        </div>
+        <div class="order-item-qty" style="font-size:0.75rem;line-height:1.7;">
+          📅 ${r.tanggal} pukul ${r.jam}<br>
+          🐶 ${r.hewan} — ${r.namaHewan}<br>
+          ${r.detail ? '📝 ' + r.detail : ''}
+        </div>
+      </div>
+    `;
+    document.getElementById('orderItems').innerHTML = html;
+    document.getElementById('orderTotal').textContent = formatRp(r.total);
+ 
+    // Update order card header
+    const orderHeader = document.querySelector('.order-card-header');
+    if (orderHeader) orderHeader.innerHTML = '<i class="fas fa-calendar-check"></i> Ringkasan Reservasi';
+ 
+    // Update step 1 label
+    const step1label = document.querySelector('.step.done .step-label');
+    if (step1label) step1label.textContent = 'Formulir';
+  }
+ 
+  function renderShopSummary() {
+    if (!pendingOrder || !pendingOrder.items || pendingOrder.items.length === 0) {
+      document.getElementById('orderItems').innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:20px 0;">Tidak ada item.</p>';
+      return;
+    }
+ 
+    const CATEGORY_ICONS = {
+      'Shampoo': '🧴', 'Alat Cukur': '✂️', 'Obat/Vitamin': '💊',
+      'Aksesoris': '🎀', 'Elektronik': '🔌'
+    };
+ 
+    let html = '';
+    pendingOrder.items.forEach(item => {
+      const icon = CATEGORY_ICONS[item.kategori] || '📦';
+      html += `
+        <div class="order-item">
+          <div>
+            <div class="order-item-name">${icon} ${item.nama}</div>
+            <div class="order-item-qty">${item.satuan || 'pcs'} × ${item.qty}</div>
+          </div>
+          <div class="order-item-price">${formatRp(item.hargaNum * item.qty)}</div>
+        </div>
+      `;
+    });
+ 
+    document.getElementById('orderItems').innerHTML = html;
+    document.getElementById('orderTotal').textContent = formatRp(pendingOrder.total);
+  }
+ 
+  function selectMethod(method) {
+    selectedMethod = method;
+ 
+    // Reset all cards
+    ['qris', 'ewallet', 'tunai'].forEach(m => {
+      document.getElementById('card-' + m).classList.remove('selected');
+      document.getElementById('detail-' + m).classList.remove('show');
+      document.getElementById('radio-' + m).innerHTML = '';
+    });
+ 
+    // Activate selected
+    document.getElementById('card-' + method).classList.add('selected');
+    document.getElementById('detail-' + method).classList.add('show');
+  }
+ 
+  function selectWallet(name, number, el) {
+    selectedWalletName = name.toUpperCase();
+    document.querySelectorAll('.wallet-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('walletNumberText').textContent = number;
+    document.getElementById('walletNumber').classList.add('show');
+  }
+ 
+  function submitPembayaran() {
+    if (!selectedMethod) {
+      showToast('Pilih metode pembayaran terlebih dahulu!', 'error');
+      return;
+    }
+ 
+    // BUG FIX: guard based on orderType, not just pendingOrder
+    if (orderType === 'reservasi' && !pendingReservasi) {
+      showToast('Data reservasi tidak ditemukan!', 'error');
+      return;
+    }
+    if (orderType === 'shop' && !pendingOrder) {
+      showToast('Tidak ada pesanan ditemukan!', 'error');
+      return;
+    }
+ 
+    const nama = document.getElementById('custNama').value.trim();
+    const wa = document.getElementById('custWa').value.trim();
+    const alamatEl = document.getElementById('custAlamat');
+    const alamat = alamatEl ? alamatEl.value.trim() : '';
+ 
+    if (!nama || !wa) {
+      showToast('Lengkapi nama dan nomor WhatsApp!', 'error');
+      return;
+    }
+    if (orderType === 'shop' && !alamat) {
+      showToast('Lengkapi alamat pengiriman!', 'error');
+      return;
+    }
+ 
+    if (selectedMethod === 'ewallet' && !selectedWalletName) {
+      showToast('Pilih jenis e-wallet terlebih dahulu!', 'error');
+      return;
+    }
+ 
+    const methodLabels = {
+      'qris': 'QRIS',
+      'ewallet': 'E-Wallet (' + selectedWalletName + ')',
+      'tunai': 'Tunai / COD'
+    };
+ 
+    // BUG FIX: use correct total based on orderType
+    const totalAmount = orderType === 'reservasi' ? pendingReservasi.total : pendingOrder.total;
+ 
+    // Show confirmation modal
+    document.getElementById('confirmMethodText').textContent = methodLabels[selectedMethod];
+    document.getElementById('confirmTotalText').textContent = formatRp(totalAmount);
+    const m = document.getElementById('confirmModal');
+    m.style.display = 'flex';
+    requestAnimationFrame(() => m.classList.add('open'));
+  }
+ 
+  function closeConfirmModal() {
+    const m = document.getElementById('confirmModal');
+    m.classList.remove('open');
+    setTimeout(() => { m.style.display = 'none'; }, 250);
+  }
+ 
+  function prosesPayment() {
+    closeConfirmModal();
+ 
+    const nama = document.getElementById('custNama').value.trim();
+    const wa = document.getElementById('custWa').value.trim();
+    const alamatEl = document.getElementById('custAlamat');
+    const alamat = alamatEl ? alamatEl.value.trim() : '-';
+ 
+    const methodLabels = {
+      'qris': 'QRIS',
+      'ewallet': 'E-Wallet (' + selectedWalletName + ')',
+      'tunai': 'Tunai / COD'
+    };
+ 
+    if (orderType === 'reservasi' && pendingReservasi) {
+      // ===== PROSES RESERVASI =====
+      const resOrder = {
+        kode: pendingReservasi.kode,
+        tipe: 'reservasi',
+        waktu: new Date().toLocaleString('id-ID'),
+        nama: nama || pendingReservasi.pemilik,
+        wa: wa || pendingReservasi.wa,
+        alamat: '-',
+        metode: methodLabels[selectedMethod],
+        // Reservasi-specific fields
+        tanggal: pendingReservasi.tanggal,
+        jam: pendingReservasi.jam,
+        hewan: pendingReservasi.hewan,
+        namaHewan: pendingReservasi.namaHewan,
+        paket: pendingReservasi.paket,
+        detail: pendingReservasi.detail,
+        items: [{ nama: pendingReservasi.paket, qty: 1, hargaNum: pendingReservasi.total, satuan: 'sesi' }],
+        total: pendingReservasi.total,
+        status: 'Menunggu Konfirmasi'
+      };
+ 
+      // Save to reservasi admin data
+      let reservasiData = JSON.parse(localStorage.getItem('reservasiData')) || [];
+      reservasiData.push({
+        tanggal: pendingReservasi.tanggal,
+        jam: pendingReservasi.jam,
+        pemilik: resOrder.nama,
+        hewan: pendingReservasi.hewan,
+        namaHewan: pendingReservasi.namaHewan,
+        paket: pendingReservasi.paket,
+        detail: pendingReservasi.detail,
+        harga: formatRp(pendingReservasi.total),
+        wa: resOrder.wa,
+        metode: methodLabels[selectedMethod],
+        kode: pendingReservasi.kode,
+        status: 'Menunggu Konfirmasi'
+      });
+      localStorage.setItem('reservasiData', JSON.stringify(reservasiData));
+ 
+      // BUG FIX: also save to konfirmasiPesanan so pesanansaya.html can read it
+      let konfirmasiOrders = JSON.parse(localStorage.getItem('konfirmasiPesanan')) || [];
+      konfirmasiOrders.unshift(resOrder);
+      localStorage.setItem('konfirmasiPesanan', JSON.stringify(konfirmasiOrders));
+ 
+      // Save to pesanan saya
+      let myOrders = JSON.parse(localStorage.getItem('pesananSaya')) || [];
+      myOrders.unshift(resOrder);
+      localStorage.setItem('pesananSaya', JSON.stringify(myOrders));
+ 
+      localStorage.setItem('lastCustomerWa', resOrder.wa);
+      localStorage.removeItem('pendingReservasi');
+ 
+      // Show success
+      document.getElementById('finalOrderCode').textContent = resOrder.kode;
+      document.getElementById('methodConfirmText').textContent = methodLabels[selectedMethod];
+      document.getElementById('successOverlay').classList.add('show');
+ 
+      // Update success message for reservasi
+      const successCard = document.querySelector('.success-card');
+      if (successCard) {
+        const h3 = successCard.querySelector('h3');
+        if (h3) h3.textContent = 'Reservasi Berhasil! 🐾';
+        const p = successCard.querySelector('p');
+        if (p) p.textContent = 'Reservasi groomingmu telah kami catat. Admin akan segera mengkonfirmasi jadwalmu.';
+      }
+ 
+    } else if (orderType === 'shop' && pendingOrder) {
+      // ===== PROSES SHOP ORDER =====
+      // Reduce stock
+      const stok = JSON.parse(localStorage.getItem('stokBarang')) || [];
+      pendingOrder.items.forEach(cartItem => {
+        const s = stok.find(x => x.kode === cartItem.kode);
+        if (s) s.jumlah = Math.max(0, parseInt(s.jumlah) - cartItem.qty);
+      });
+      localStorage.setItem('stokBarang', JSON.stringify(stok));
+ 
+      const order = {
+        kode: pendingOrder.kode,
+        tipe: 'shop',
+        waktu: new Date().toLocaleString('id-ID'),
+        nama: nama,
+        wa: wa,
+        alamat: alamat,
+        metode: methodLabels[selectedMethod],
+        items: pendingOrder.items,
+        total: pendingOrder.total,
+        status: 'Menunggu Konfirmasi'
+      };
+ 
+      let orders = JSON.parse(localStorage.getItem('konfirmasiPesanan')) || [];
+      orders.unshift(order);
+      localStorage.setItem('konfirmasiPesanan', JSON.stringify(orders));
+ 
+      let myOrders = JSON.parse(localStorage.getItem('pesananSaya')) || [];
+      myOrders.unshift(order);
+      localStorage.setItem('pesananSaya', JSON.stringify(myOrders));
+ 
+      localStorage.setItem('lastCustomerWa', wa);
+      localStorage.removeItem('pendingOrder');
+      localStorage.removeItem('custCart');
+ 
+      document.getElementById('finalOrderCode').textContent = pendingOrder.kode;
+      document.getElementById('methodConfirmText').textContent = methodLabels[selectedMethod];
+      document.getElementById('successOverlay').classList.add('show');
+    }
+  }
+ 
+  // INIT
+  loadOrder();
+</script>
+<script src="app.js"></script>
+</body>
+</html>
