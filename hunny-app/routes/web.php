@@ -1,22 +1,39 @@
-<?php
+﻿<?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
 
-// --- FRONTEND / CUSTOMER ---
-Route::get('/', function () { return view('beranda'); });
-Route::get('/customer', function () { return view('customer'); });
-Route::get('/pembayaran', function () { return view('pembayaran'); });
-Route::get('/pesanan-saya', function () { return view('pesanan-saya'); });
+Route::view('/', 'beranda')->name('beranda');
+Route::view('/customer', 'customer')->name('customer');
+Route::view('/kontak', 'kontak')->name('kontak');
+Route::view('/pembayaran', 'pembayaran')->name('pembayaran');
+Route::view('/pesanan-saya', 'pesanan-saya')->name('pesanan.saya');
+Route::view('/tentang', 'tentang')->name('tentang');
 
-// --- HALAMAN UTAMA LAYOUT MASTER ---
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/tentang',   [DashboardController::class, 'tentang'])->name('tentang');
-Route::get('/kontak',    [DashboardController::class, 'kontak'])->name('kontak');
-Route::post('/kontak',   [DashboardController::class, 'kirimKontak'])->name('kontak.kirim');
+Route::get('/dashboard', function () {
+    return redirect()->route('beranda');
+})->middleware(['auth'])->name('dashboard');
 
-// --- BACKEND / ADMIN ---
-Route::get('/admin/input',      function () { return view('admin.input'); });
-Route::get('/admin/konfirmasi', function () { return view('admin.konfirmasi'); });
-Route::get('/admin/stok',       function () { return view('admin.stok'); });
-Route::get('/admin/reservasi',  function () { return view('admin.reservasi'); });
+Route::middleware('auth')->group(function () {
+
+    // Customer: hanya bisa lihat & buat booking miliknya
+    Route::resource('booking', BookingController::class)
+         ->only(['index', 'create', 'store', 'show']);
+
+    // Admin only: bisa edit, update, hapus
+    Route::resource('booking', BookingController::class)
+         ->only(['edit', 'update', 'destroy'])
+         ->middleware('cek.admin');
+
+    Route::view('/admin/input', 'admin.input')->name('admin.input');
+    Route::view('/admin/konfirmasi', 'admin.konfirmasi')->name('admin.konfirmasi');
+    Route::view('/admin/reservasi', 'admin.reservasi')->name('admin.reservasi');
+    Route::view('/admin/stok', 'admin.stok')->name('admin.stok');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

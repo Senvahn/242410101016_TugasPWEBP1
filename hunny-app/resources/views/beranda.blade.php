@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -11,7 +11,7 @@
 
 <!-- NAV -->
 <nav class="home-nav" id="homeNav">
-  <a href="index.html" class="nav-brand">
+  <a href="{{ route('beranda') }}" class="nav-brand">
     <img src="logohunny.webp" alt="Hunny Logo">
     <span class="nav-brand-name">Hunny Pet Care</span>
   </a>
@@ -42,11 +42,11 @@
       Solusi manajemen perawatan hewan peliharaan terlengkap, mulai dari reservasi grooming hingga pengelolaan stok perlengkapan terbaik.
     </p>
     <div class="hero-actions">
-      <a href="admin.html" class="btn-hero-primary">
+      <a href="{{ url('/admin/input') }}" class="btn-hero-primary">
         <i class="fas fa-th-large"></i>
         Buka Dashboard
       </a>
-      <a href="customer.html" class="btn-hero-secondary" style="text-decoration:none;">
+      <a href="{{ url('/customer') }}" class="btn-hero-secondary" style="text-decoration:none;">
         Portal Customer <i class="fas fa-arrow-right"></i>
       </a>
     </div>
