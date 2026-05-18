@@ -37,11 +37,29 @@
                         <th>Kategori</th>
                         <th>Jumlah</th>
                         <th>Harga</th>
+                        <th>Supplier</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody id="stokTableBody">
-                    </tbody>
+                <tbody>
+                    @foreach($produks as $p)
+                        <tr>
+                            <td><strong>{{ $p->kode_barang }}</strong></td>
+                            <td>{{ $p->nama_barang }}</td>
+                            <td><span class="status-tag info">{{ $p->kategori }}</span></td>
+                            <td><strong style="color: {{ $p->jumlah < 5 ? 'var(--danger)' : 'inherit' }}">{{ $p->jumlah }}</strong></td>
+                            <td>Rp {{ number_format($p->harga_beli ?? 0,0,',','.') }}</td>
+                            <td>{{ $p->supplier?->nama_supplier ?? '-' }}</td>
+                            <td>
+                                <form action="{{ route('admin.produk.destroy', $p) }}" method="POST" onsubmit="return confirm('Hapus barang ini dari stok?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn-icon"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
             </table>
         </div>
     </div>
@@ -50,38 +68,12 @@
 
 @section('scripts')
 <script>
-    const DATA_KEY = 'stokBarang';
-
-    function renderTable() {
-        const data = JSON.parse(localStorage.getItem(DATA_KEY)) || [];
-        const tbody = document.getElementById('stokTableBody');
-        
-        tbody.innerHTML = data.map((b, index) => `
-            <tr>
-                <td><strong>${b.kode}</strong></td>
-                <td>${b.nama}</td>
-                <td><span class="status-tag info">${b.kategori}</span></td>
-                <td><strong style="color: ${parseInt(b.jumlah) < 5 ? 'var(--danger)' : 'inherit'}">${b.jumlah}</strong></td>
-                <td>Rp ${parseInt(b.harga).toLocaleString()}</td>
-                <td>
-                    <button class="btn-icon" onclick="deleteBarang(${index})"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `).join('');
-
-        document.getElementById('totalJenis').textContent = data.length;
-        document.getElementById('lowStock').textContent = data.filter(b => parseInt(b.jumlah) < 5).length;
-    }
-
-    function deleteBarang(index) {
-        if(confirm('Hapus barang ini dari stok?')) {
-            let data = JSON.parse(localStorage.getItem(DATA_KEY)) || [];
-            data.splice(index, 1);
-            localStorage.setItem(DATA_KEY, JSON.stringify(data));
-            renderTable();
-        }
-    }
-
-    window.onload = renderTable;
+    // update stats
+    document.addEventListener('DOMContentLoaded', function () {
+        const total = {{ $produks->count() }};
+        const low = {{ $produks->where('jumlah', '<', 5)->count() }};
+        document.getElementById('totalJenis').textContent = total;
+        document.getElementById('lowStock').textContent = low;
+    });
 </script>
 @endsection

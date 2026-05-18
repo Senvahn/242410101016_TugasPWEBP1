@@ -20,9 +20,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // 2. Jalankan StokSeeder untuk mengisi tabel produks
+        // 2. Jalankan StokSeeder, ProductSeeder dan ServiceSeeder untuk mengisi tabel produks, suppliers, dan services
         $this->call([
             StokSeeder::class,
+            ProductSeeder::class,
+            ServiceSeeder::class,
+            AdminSeeder::class,
         ]);
 
         // 3. Buat Customer dummy

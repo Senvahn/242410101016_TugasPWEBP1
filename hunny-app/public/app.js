@@ -158,74 +158,63 @@
   setTimeout(() => clearInterval(counterInterval), 5000);
 })();
 
-(function initDarkMode() {
-  const style = document.createElement('style');
-  style.textContent = `
-    body.dark-mode {
-      --primary: #e8d5bf;
-      --cream: #111820;
-      --cream-dark: #1a2535;
-      --white: #1e2d3e;
-      --text: #d4c4b0;
-      --text-muted: #8a9bb0;
-      --border: #2a3d52;
-    }
-    body.dark-mode .sidebar { background: #0d1925; }
-    body.dark-mode .topbar { background: #1e2d3e; border-color: #2a3d52; }
-    body.dark-mode table thead tr { background: #1a2535; }
-    body.dark-mode .home-nav { background: rgba(13,25,37,0.97) !important; }
-    body.dark-mode .hero { background: linear-gradient(135deg, #070e15, #0d1925, #131f2c); }
-    body.dark-mode .stats-strip { background: #1e2d3e; border-color: #2a3d52; }
-    body.dark-mode .features-section { background: #111820; }
-    body.dark-mode .feature-card { background: #1e2d3e; border-color: #2a3d52; }
-    body.dark-mode .feature-card:hover { background: #243648; }
-    body.dark-mode code { background: #2a3d52 !important; color: #c9894a !important; }
-    body.dark-mode .form-control { background: #1a2535; border-color: #2a3d52; color: #d4c4b0; }
-    body.dark-mode .form-control:focus { background: #1e2d3e; }
-    body.dark-mode .modal { background: #1e2d3e; }
-    body.dark-mode .chip { background: #1e2d3e; border-color: #2a3d52; color: #8a9bb0; }
-    body.dark-mode .chip.active { background: #1a2b3c; }
-    body.dark-mode .product-card { background: #1e2d3e; border-color: #2a3d52; }
-    body.dark-mode .search-bar { background: #1a2535; border-color: #2a3d52; }
-    body.dark-mode .search-bar input { color: #d4c4b0; }
-
-    /* Toggle button */
-    #darkModeBtn {
-      background: none; border: 1.5px solid var(--border);
-      border-radius: 99px; padding: 6px 14px;
-      cursor: pointer; font-size: 0.82rem; font-weight: 600;
-      color: var(--text-muted); display: flex; align-items: center; gap: 6px;
-      transition: all 0.25s ease; white-space: nowrap;
-      font-family: 'DM Sans', sans-serif;
-    }
-    #darkModeBtn:hover { border-color: var(--accent); color: var(--accent); }
-  `;
-  document.head.appendChild(style);
-
-  function applyDark(on) {
-    document.body.classList.toggle('dark-mode', on);
-    const btn = document.getElementById('darkModeBtn');
-    if (btn) btn.innerHTML = on ? '☀️ Light Mode' : '🌙 Dark Mode';
+(function initThemePreferences() {
+  function setCookie(name, value, days = 365) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expires}; path=/; samesite=Lax`;
   }
 
-  window.addEventListener('load', () => {
-    const saved = localStorage.getItem('hpc-darkmode') === 'true';
-    const btn = document.createElement('button');
-    btn.id = 'darkModeBtn';
-    btn.innerHTML = saved ? '☀️ Light Mode' : '🌙 Dark Mode';
-    btn.onclick = () => {
-      const next = !document.body.classList.contains('dark-mode');
-      localStorage.setItem('hpc-darkmode', next);
-      applyDark(next);
-    };
+  function getCookie(name) {
+    const matches = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '=([^;]*)'));
+    return matches ? decodeURIComponent(matches[1]) : null;
+  }
 
-    // Insert into topbar-right OR nav-links
-    const topbarRight = document.querySelector('.topbar-right');
-    const navLinks    = document.querySelector('.nav-links');
-    if (topbarRight) topbarRight.prepend(btn);
-    else if (navLinks) navLinks.prepend(btn);
+  function resolveTheme(theme) {
+    if (theme === 'dark') return 'dark';
+    if (theme === 'light') return 'light';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
 
-    applyDark(saved);
+  function applyTheme(theme) {
+    const resolved = resolveTheme(theme);
+    document.documentElement.classList.toggle('dark', resolved === 'dark');
+    document.body.classList.toggle('dark-mode', resolved === 'dark');
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.textContent = resolved === 'dark' ? '☀️ Light' : '🌙 Dark';
+    }
+  }
+
+  function applyFontSize(fontSize) {
+    document.documentElement.classList.remove('font-small', 'font-medium', 'font-large');
+    document.documentElement.classList.add(`font-${fontSize}`);
+  }
+
+  function updateThemePreference(nextTheme) {
+    setCookie('hunny_theme', nextTheme, 525600);
+    applyTheme(nextTheme);
+  }
+
+  function handleThemeToggle() {
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    updateThemePreference(nextTheme);
+  }
+
+  window.applyTheme = applyTheme;
+  window.applyFontSize = applyFontSize;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = getCookie('hunny_theme') || 'system';
+    const savedFontSize = getCookie('hunny_font_size') || 'medium';
+
+    applyTheme(savedTheme);
+    applyFontSize(savedFontSize);
+
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+      btn.addEventListener('click', handleThemeToggle);
+    }
   });
 })();
 

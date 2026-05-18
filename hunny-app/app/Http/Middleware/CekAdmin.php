@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CekAdmin extends Middleware
+class CekAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {

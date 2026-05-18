@@ -6,12 +6,7 @@
 <div class="topbar">
     <div class="topbar-left">
         <h1 class="page-title">Daftar Reservasi</h1>
-        <p class="page-subtitle">Pantau dan atur jadwal grooming anabul</p>
-    </div>
-    <div class="topbar-right">
-        <button class="btn btn-accent" onclick="openModal()">
-            <i class="fas fa-plus"></i> Tambah Reservasi
-        </button>
+        <p class="page-subtitle">Pantau dan kelola reservasi grooming yang masuk.</p>
     </div>
 </div>
 
@@ -19,11 +14,11 @@
     <div class="stats-grid" style="margin-bottom: 24px;">
         <div class="stat-card">
             <span class="stat-label">Total Reservasi</span>
-            <span class="stat-value" id="totalRes">0</span>
+            <span class="stat-value">{{ $bookings->total() }}</span>
         </div>
         <div class="stat-card">
-            <span class="stat-label">Hari Ini</span>
-            <span class="stat-value" id="todayRes" style="color:var(--info)">0</span>
+            <span class="stat-label">Reservasi Mendatang</span>
+            <span class="stat-value" style="color:var(--info)">{{ $bookings->where('tanggal_reservasi', '>=', now()->toDateString())->count() }}</span>
         </div>
     </div>
 
@@ -32,83 +27,42 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Jadwal</th>
+                        <th>Kode</th>
                         <th>Pemilik</th>
                         <th>Anabul</th>
-                        <th>Paket</th>
+                        <th>Layanan</th>
+                        <th>Tanggal</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody id="reservasiTableBody">
-                    </tbody>
+                <tbody>
+                    @forelse($bookings as $booking)
+                        <tr>
+                            <td>{{ $booking->kode_booking }}</td>
+                            <td>{{ $booking->nama_pemilik }}</td>
+                            <td>{{ $booking->nama_hewan }}<br><span class="text-xs text-gray-500">{{ $booking->jenis_hewan }}</span></td>
+                            <td>{{ $booking->jenis_layanan }}</td>
+                            <td>{{ \Carbon\Carbon::parse($booking->tanggal_reservasi)->format('d M Y') }}</td>
+                            <td>
+                                <span class="status-tag status-{{ $booking->status }}">{{ ucfirst($booking->status) }}</span>
+                            </td>
+                            <td>
+                                <a href="{{ route('booking.edit', $booking) }}" class="btn btn-sm btn-outline">Edit</a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center p-6 text-gray-500">Belum ada reservasi.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
             </table>
         </div>
     </div>
-</div>
 
-<div class="modal-overlay" id="modalOverlay" style="display:none;">
-    <div class="modal-card">
-        <h3>Tambah Reservasi Manual</h3>
-        <form id="reservasiForm">
-            <div class="form-group">
-                <label>Nama Pemilik</label>
-                <input type="text" name="pemilik" required>
-            </div>
-            <div class="form-group">
-                <label>Tanggal</label>
-                <input type="date" name="tanggal" required>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn" onclick="closeModal()">Batal</button>
-                <button type="submit" class="btn btn-accent">Simpan</button>
-            </div>
-        </form>
+    <div class="mt-4">
+        {{ $bookings->links() }}
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    const DATA_KEY = 'pendingReservasi';
-
-    function renderTable() {
-        const data = JSON.parse(localStorage.getItem(DATA_KEY)) || [];
-        const tbody = document.getElementById('reservasiTableBody');
-        
-        tbody.innerHTML = data.map((r, index) => `
-            <tr>
-                <td><strong>${r.tanggal}</strong><br><small>${r.jam || ''}</small></td>
-                <td>${r.pemilik}</td>
-                <td>${r.namaHewan} (${r.hewan})</td>
-                <td>${r.paket}</td>
-                <td><span class="status-tag status-pending">${r.status || 'Diproses'}</span></td>
-                <td>
-                    <button class="btn-icon" onclick="deleteRes(${index})"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `).join('');
-
-        document.getElementById('totalRes').textContent = data.length;
-    }
-
-    function openModal() {
-        document.getElementById('modalOverlay').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('modalOverlay').style.display = 'none';
-    }
-
-    function deleteRes(index) {
-        if(confirm('Hapus reservasi ini?')) {
-            let data = JSON.parse(localStorage.getItem(DATA_KEY)) || [];
-            data.splice(index, 1);
-            localStorage.setItem(DATA_KEY, JSON.stringify(data));
-            renderTable();
-        }
-    }
-
-    window.onload = renderTable;
-</script>
 @endsection

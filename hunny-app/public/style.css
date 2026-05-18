@@ -23,6 +23,27 @@
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+html.dark {
+  color-scheme: dark;
+  --primary: #0f172a;
+  --accent: #c68949;
+  --accent-light: #d4a167;
+  --cream: #111820;
+  --cream-dark: #0f172a;
+  --white: #1e2d3c;
+  --text: #e2d6c8;
+  --text-muted: #9bb0c4;
+  --border: #273849;
+  --success: #38a169;
+  --danger: #f56565;
+  --warning: #d69e2e;
+  --info: #63b3ed;
+}
+
+html.font-small { font-size: 14px; }
+html.font-medium { font-size: 16px; }
+html.font-large { font-size: 18px; }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -542,6 +563,52 @@ select.form-control {
   background-position: right 14px center;
   padding-right: 36px;
 }
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--cream);
+  color: var(--primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-icon:hover {
+  border-color: var(--accent);
+  background: rgba(201,137,74,0.12);
+  color: var(--accent);
+}
+
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.status-pending { background: rgba(218,165,32,0.15); color: var(--warning); }
+.status-menunggu-konfirmasi { background: rgba(218,165,32,0.15); color: var(--warning); }
+.status-selesai { background: rgba(56,161,105,0.12); color: var(--success); }
+.status-diproses { background: rgba(49,130,206,0.12); color: var(--info); }
 
 /* ============ SEARCH ============ */
 .search-bar {

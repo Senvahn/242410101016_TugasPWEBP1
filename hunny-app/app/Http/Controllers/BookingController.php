@@ -10,14 +10,14 @@ class BookingController extends Controller
 {
     public function index()
     {
-    // Admin lihat semua, customer hanya lihat punyanya sendiri
-    if (auth()->user()->isAdmin()) {
-        $bookings = Booking::latest()->paginate(10);
-    } else {
-        $bookings = Booking::where('user_id', auth()->id())->latest()->paginate(10);
-    }
+        // Admin lihat semua, customer hanya lihat punyanya sendiri
+        if (auth()->user()->isAdmin()) {
+            $bookings = Booking::latest()->paginate(10);
+            return view('admin.reservasi', compact('bookings'));
+        }
 
-    return view('booking.index', compact('bookings'));
+        $bookings = Booking::where('user_id', auth()->id())->latest()->paginate(10);
+        return view('booking.index', compact('bookings'));
     }
 
     public function create()
@@ -29,7 +29,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'nama_pemilik'     => 'required|min:3',
-            'email'            => 'required|email|unique:bookings,email',
+            'email'            => 'required|email|max:190',
             'jenis_layanan'    => 'required|in:Basic Grooming,Full Grooming,Spa & Treatment,Nail Trimming',
             'nama_hewan'       => 'required|min:2',
             'jenis_hewan'      => 'required|in:Anjing,Kucing,Kelinci,Lainnya',
@@ -40,6 +40,7 @@ class BookingController extends Controller
 
         // Auto-generate kode booking
         $validated['kode_booking'] = 'HNY-' . strtoupper(Str::random(6));
+        $validated['user_id'] = auth()->id();
 
         // Upload foto hewan
         if ($request->hasFile('foto_hewan')) {
@@ -66,7 +67,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'nama_pemilik'     => 'required|min:3',
-            'email'            => 'required|email|unique:bookings,email,' . $booking->id,
+            'email'            => 'required|email|max:190',
             'jenis_layanan'    => 'required|in:Basic Grooming,Full Grooming,Spa & Treatment,Nail Trimming',
             'nama_hewan'       => 'required|min:2',
             'jenis_hewan'      => 'required|in:Anjing,Kucing,Kelinci,Lainnya',
@@ -101,5 +102,45 @@ class BookingController extends Controller
 
         return redirect()->route('booking.index')
             ->with('success', 'Reservasi berhasil dihapus.');
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'nullable|string|max:255',
+        ]);
+
+        $query = trim($request->input('query', ''));
+
+        $search = Booking::query();
+
+        if (!auth()->user()->isAdmin()) {
+            $search->where('user_id', auth()->id());
+        }
+
+        if ($query !== '') {
+            $search->where(function ($builder) use ($query) {
+                $builder->where('kode_booking', 'like', "%{$query}%")
+                    ->orWhere('nama_pemilik', 'like', "%{$query}%")
+                    ->orWhere('nama_hewan', 'like', "%{$query}%")
+                    ->orWhere('email', 'like', "%{$query}%");
+            });
+        }
+
+        $results = $search->latest()->limit(20)->get();
+
+        return response()->json([
+            'data' => $results->map(function ($booking) {
+                return [
+                    'kode_booking' => $booking->kode_booking,
+                    'nama_pemilik' => $booking->nama_pemilik,
+                    'nama_hewan' => $booking->nama_hewan,
+                    'jenis_hewan' => $booking->jenis_hewan,
+                    'jenis_layanan' => $booking->jenis_layanan,
+                    'tanggal_reservasi' => $booking->tanggal_reservasi,
+                    'status' => $booking->status,
+                ];
+            }),
+        ]);
     }
 }

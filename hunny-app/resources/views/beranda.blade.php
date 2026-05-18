@@ -6,6 +6,39 @@
   <title>Hunny Pet Care</title>
   <link rel="stylesheet" href="{{ asset('style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .weather-widget {
+      max-width: 320px;
+      margin: 30px auto 0;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 20px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.05);
+      padding: 24px;
+      text-align: center;
+    }
+    .weather-widget h3 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .weather-widget .weather-temp {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #0d4f8b;
+      margin: 8px 0;
+    }
+    .weather-widget .weather-desc {
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.95rem;
+    }
+    .weather-widget .weather-loading {
+      color: #9ca3af;
+      font-size: 0.95rem;
+      margin-top: 12px;
+    }
+  </style>
 </head>
 <body>
 
@@ -78,6 +111,14 @@
   </div>
 </div>
 
+<!-- WEATHER WIDGET -->
+<section class="weather-widget" aria-label="Cuaca Surabaya">
+  <h3>Cuaca Surabaya</h3>
+  <div id="weatherContent">
+    <div class="weather-loading">Memuat data cuaca...</div>
+  </div>
+</section>
+
 <!-- FEATURES -->
 <section class="features-section">
   <div class="section-label">Layanan Kami</div>
@@ -120,6 +161,33 @@
     nav.classList.toggle('scrolled', window.scrollY > 50);
   });
   nav.classList.add('scrolled'); // always show nav bg
+
+  async function fetchWeather() {
+    const container = document.getElementById('weatherContent');
+    container.innerHTML = '<div class="weather-loading">Memuat data cuaca...</div>';
+
+    try {
+      const response = await fetch('https://wttr.in/Surabaya?format=j1');
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data cuaca');
+      }
+      const data = await response.json();
+      const city = 'Surabaya';
+      const tempC = data.current_condition?.[0]?.temp_C ?? '-';
+      const description = data.current_condition?.[0]?.weatherDesc?.[0]?.value ?? 'Tidak tersedia';
+
+      container.innerHTML = `
+        <div class="weather-temp">${tempC}°C</div>
+        <p class="weather-desc">${description}</p>
+        <p class="weather-desc">Kota: ${city}</p>
+      `;
+    } catch (error) {
+      container.innerHTML = `<div class="weather-loading">Tidak dapat memuat cuaca saat ini.</div>`;
+      console.error('Weather fetch error:', error);
+    }
+  }
+
+  fetchWeather();
 </script>
 <script src="{{ asset('app.js') }}"></script>
 </body>
