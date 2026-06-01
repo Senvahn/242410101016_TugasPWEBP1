@@ -1,57 +1,27 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title') | Hunny Pet Care</title>
+    <title>Admin Dashboard - {{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="admin-centered">
-    <!-- Shared header (customer-style) -->
-    <header class="header">
-        <div class="header-container">
-            <div class="header-left">
-                <a href="{{ route('beranda') }}" class="header-brand">
-                    <img src="{{ asset('logohunny.webp') }}" alt="Hunny Logo">
-                    <div class="header-brand-text">
-                        <h2>Hunny Pet Care</h2>
-                        <p>Dashboard Admin</p>
-                    </div>
-                </a>
-            </div>
-            <div class="header-right">
-                <div class="header-info">
-                    <i class="fas fa-user-circle" style="color: var(--accent); font-size: 1.2rem;"></i>
-                    <div>
-                        Halo, <strong>{{ auth()->user()->name }}</strong>
-                    </div>
-                </div>
-                <a href="{{ route('profile.edit') }}" class="header-btn header-btn-profile">
-                    <i class="fas fa-user"></i> Profil
-                </a>
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                    @csrf
-                    <button type="submit" class="header-btn header-btn-logout">
-                        <i class="fas fa-sign-out-alt"></i> Keluar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </header>
-
+<body>
     <div class="dash-layout">
-        <aside class="sidebar" id="sidebar">
-            <a href="{{ url('/') }}" class="sidebar-brand">
-                <img src="{{ asset('logohunny.webp') }}" alt="Logo Hunny">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <a href="{{ route('beranda') }}" class="sidebar-brand">
+                <img src="{{ asset('logohunny.webp') }}" alt="Logo">
                 <div class="sidebar-brand-text">
                     <span class="brand-name">Hunny</span>
                     <span class="brand-sub">Admin</span>
                 </div>
             </a>
+
             <nav class="sidebar-nav">
-                <span class="nav-label">Dashboard</span>
+                <div class="nav-label">Dashboard</div>
                 <a href="{{ route('admin.stok') }}" class="nav-item {{ request()->routeIs('admin.stok') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-boxes"></i> Stok Barang
                 </a>
@@ -64,14 +34,8 @@
                 <a href="{{ route('admin.reservasi') }}" class="nav-item {{ request()->routeIs('admin.reservasi') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-calendar"></i> Reservasi Grooming
                 </a>
-                <a href="{{ route('admin.services.index') }}" class="nav-item {{ request()->routeIs('admin.services.*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-scissors"></i> Kelola Jasa Grooming
-                </a>
-                <a href="{{ route('preferensi.index') }}" class="nav-item {{ request()->routeIs('preferensi.index') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-cog"></i> Preferensi
-                </a>
 
-                <span class="nav-label" style="margin-top: 24px;">Akun</span>
+                <div class="nav-label" style="margin-top: 24px;">Akun</div>
                 <a href="{{ route('profile.edit') }}" class="nav-item {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-user-circle"></i> Profil
                 </a>
@@ -87,18 +51,20 @@
                 </div>
                 <form method="POST" action="{{ route('logout') }}" style="margin-top: 12px;">
                     @csrf
-                    <button type="submit" class="nav-item" style="width: 100%; justify-content: center; border-top: 1px solid rgba(255, 37, 37, 0.08); padding-top: 12px;">
+                    <button type="submit" class="nav-item" style="justify-content: center; border-top: 1px solid rgba(255, 55, 55, 0.08); padding-top: 12px;">
                         <i class="nav-icon fas fa-sign-out-alt"></i> Keluar
                     </button>
                 </form>
             </div>
         </aside>
 
+        <!-- MAIN CONTENT -->
         <div class="main-content">
+            <!-- TOP BAR -->
             <div class="topbar">
                 <div class="topbar-left">
-                    <h2>@yield('title', 'Dashboard')</h2>
-                    <p>Kelola layanan Hunny Pet Care</p>
+                    <h2>{{ isset($title) ? $title : 'Dashboard' }}</h2>
+                    <p>{{ isset($subtitle) ? $subtitle : 'Kelola layanan Hunny Pet Care' }}</p>
                 </div>
                 <div class="topbar-right">
                     <div class="topbar-badge">
@@ -107,6 +73,7 @@
                 </div>
             </div>
 
+            <!-- PAGE CONTENT -->
             <div class="page-content">
                 @yield('content')
             </div>

@@ -15,8 +15,8 @@
     </div>
 </div>
 
-<div class="page-content">
-    <div class="stats-grid" style="margin-bottom: 24px;">
+    <div class="page-content">
+    <div class="stats-grid">
         <div class="stat-card">
             <span class="stat-label">Total Pesanan</span>
             <span class="stat-value">{{ $totalOrders }}</span>
@@ -36,6 +36,7 @@
                         <th>Kode</th>
                         <th>Pelanggan</th>
                         <th>Total</th>
+                        <th>Bukti</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -46,22 +47,41 @@
                             <td>{{ $order->created_at->format('d M Y H:i') }}</td>
                             <td><strong>{{ $order->order_code }}</strong></td>
                             <td>{{ $order->nama_pemesan }}</td>
-                            <td>Rp {{ number_format($order->total, 0, ',', '.') }}</td>
+                            <td>
+                                Rp {{ number_format($order->total, 0, ',', '.') }}
+                                @if(is_array($order->items) && count($order->items))
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        @foreach($order->items as $item)
+                                            {{ $item['nama'] ?? $item['name'] ?? 'Produk' }} x{{ $item['qty'] }}@if(! $loop->last), @endif
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </td>
+                            <td>
+                                @if($order->payment_proof_path)
+                                    <button class="btn btn-sm btn-secondary" onclick="openPaymentProof('{{ asset('storage/' . $order->payment_proof_path) }}')">Cek Foto</button>
+                                @else
+                                    <span class="text-sm text-gray-500">-</span>
+                                @endif
+                            </td>
                             <td>
                                 <span class="status-tag status-{{ $order->status }}">{{ ucfirst($order->status) }}</span>
                             </td>
                             <td>
+                                @if($order->payment_proof_path)
+                                    <button class="btn btn-sm btn-secondary" onclick="openPaymentProof('{{ asset('storage/' . $order->payment_proof_path) }}')">Detail</button>
+                                @else
+                                    <span class="text-sm text-gray-500">-</span>
+                                @endif
                                 @if($order->status === 'pending')
                                     <button class="btn btn-sm btn-outline" onclick="updateStatus({{ $order->id }}, 'confirmed')">Konfirmasi</button>
                                     <button class="btn btn-sm btn-danger" onclick="updateStatus({{ $order->id }}, 'cancelled')">Tolak</button>
-                                @else
-                                    <span class="text-sm text-gray-600">Tidak ada aksi</span>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center p-6 text-gray-500">Belum ada pesanan.</td>
+                            <td colspan="7" class="text-center p-6 text-gray-500">Belum ada pesanan.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -101,6 +121,10 @@
         }
 
         window.location.reload();
+    }
+
+    function openPaymentProof(url) {
+        window.open(url, '_blank');
     }
 </script>
 @endsection

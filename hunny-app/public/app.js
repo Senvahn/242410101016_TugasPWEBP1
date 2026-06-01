@@ -181,7 +181,7 @@
     document.body.classList.toggle('dark-mode', resolved === 'dark');
     const btn = document.getElementById('themeToggleBtn');
     if (btn) {
-      btn.textContent = resolved === 'dark' ? '☀️ Light' : '🌙 Dark';
+      btn.innerHTML = resolved === 'dark' ? '<i class="fas fa-sun"></i> Terang' : '<i class="fas fa-moon"></i> Gelap';
     }
   }
 
@@ -205,7 +205,7 @@
   window.applyFontSize = applyFontSize;
 
   document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = getCookie('hunny_theme') || 'system';
+    const savedTheme = getCookie('hunny_theme') || 'light';
     const savedFontSize = getCookie('hunny_font_size') || 'medium';
 
     applyTheme(savedTheme);

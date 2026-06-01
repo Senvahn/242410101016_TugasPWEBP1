@@ -15,8 +15,11 @@
     </div>
 </div>
 
-<div class="page-content">
-    <div class="stats-grid" style="margin-bottom: 24px;">
+    <div class="page-content">
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    <div class="stats-grid">
         <div class="stat-card">
             <span class="stat-label">Total Jenis Barang</span>
             <span class="stat-value" id="totalJenis">0</span>
@@ -32,6 +35,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Gambar</th>
                         <th>Kode</th>
                         <th>Nama Barang</th>
                         <th>Kategori</th>
@@ -44,18 +48,34 @@
                 <tbody>
                     @foreach($produks as $p)
                         <tr>
+                            <td>
+                                @if($p->foto_produk)
+                                    <img src="{{ asset('storage/' . $p->foto_produk) }}" alt="{{ $p->nama_barang }}" style="width:64px; height:64px; object-fit:cover; border-radius:8px;">
+                                @else
+                                    <div style="width:64px; height:64px; display:flex; align-items:center; justify-content:center; background:#f3efe9; color:#7a6e5f; border-radius:8px;">No Img</div>
+                                @endif
+                            </td>
                             <td><strong>{{ $p->kode_barang }}</strong></td>
                             <td>{{ $p->nama_barang }}</td>
                             <td><span class="status-tag info">{{ $p->kategori }}</span></td>
                             <td><strong style="color: {{ $p->jumlah < 5 ? 'var(--danger)' : 'inherit' }}">{{ $p->jumlah }}</strong></td>
                             <td>Rp {{ number_format($p->harga_beli ?? 0,0,',','.') }}</td>
                             <td>{{ $p->supplier?->nama_supplier ?? '-' }}</td>
-                            <td>
-                                <form action="{{ route('admin.produk.destroy', $p) }}" method="POST" onsubmit="return confirm('Hapus barang ini dari stok?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn-icon"><i class="fas fa-trash"></i></button>
-                                </form>
+                            <td style="white-space:nowrap;">
+                                <a href="{{ route('admin.produk.edit', $p) }}" class="btn btn-sm btn-outline">Edit</a>
+                                @if($p->status_tersedia)
+                                    <form action="{{ route('admin.produk.destroy', $p) }}" method="POST" style="display:inline-block; margin-left:6px;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-warning">Nonaktifkan</button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('admin.produk.restore', $p) }}" method="POST" style="display:inline-block; margin-left:6px;">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-sm btn-success">Pulihkan</button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

@@ -23,10 +23,6 @@
         <div class="payment-methods">
             <h3>Pilih Metode Pembayaran</h3>
             <div class="method-grid">
-                <div class="method-card" onclick="selectMethod('Transfer Bank')">
-                    <i class="fas fa-university"></i>
-                    <span>Transfer Bank</span>
-                </div>
                 <div class="method-card" onclick="selectMethod('E-Wallet')">
                     <i class="fas fa-wallet"></i>
                     <span>E-Wallet (OVO/Gopay)</span>

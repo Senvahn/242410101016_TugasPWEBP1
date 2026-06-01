@@ -23,6 +23,7 @@ class Order extends Model
         'status',
         'note',
         'items',
+        'payment_proof_path',
     ];
 
     protected $casts = [

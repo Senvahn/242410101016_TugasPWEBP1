@@ -1,47 +1,53 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <h1><i class="fas fa-sign-in-alt"></i> Masuk ke Akun</h1>
+    <p class="text-center">Kelola layanan dan produk Hunny Pet Care</p>
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" class="auth-form">
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" class="form-control" required autofocus autocomplete="email" placeholder="contoh@email.com">
+            @error('email')
+                <div class="form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</div>
+            @enderror
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div style="position: relative;">
+                <input id="password" type="password" name="password" class="form-control password-toggle-input" required autocomplete="current-password" placeholder="Masukkan password Anda" style="padding-right: 42px;">
+                <button type="button" aria-label="Tampilkan password" onclick="togglePassword('password', 'passwordToggleIcon')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border: none; background: transparent; color: #555; cursor: pointer; padding: 0; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px;">
+                    <i id="passwordToggleIcon" class="fas fa-eye"></i>
+                </button>
+            </div>
+            @error('password')
+                <div class="form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</div>
+            @enderror
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
+        <div class="checkbox-group">
+            <input id="remember_me" type="checkbox" name="remember">
+            <label for="remember_me">Ingat saya</label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+        <div class="form-actions">
+            <button type="submit" class="btn-submit"><i class="fas fa-lock"></i> Masuk</button>
         </div>
+
+        <div class="auth-footer">
+            Belum punya akun? <a href="{{ route('register') }}">Daftar sekarang</a>
+        </div>
+
     </form>
+
+    <script>
+        function togglePassword(fieldId, iconId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(iconId);
+            const hidden = field.type === 'password';
+            field.type = hidden ? 'text' : 'password';
+            icon.className = `fas ${hidden ? 'fa-eye-slash' : 'fa-eye'}`;
+        }
+    </script>
 </x-guest-layout>

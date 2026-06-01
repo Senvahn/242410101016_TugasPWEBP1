@@ -39,7 +39,7 @@
         }
 
         (function () {
-            const theme = getCookie('hunny_theme') || 'system';
+            const theme = getCookie('hunny_theme') || 'light';
             const fontSize = getCookie('hunny_font_size') || 'medium';
             applyTheme(theme);
             applyFontSize(fontSize);
@@ -52,27 +52,28 @@
 <body>
 
 <nav class="cust-nav">
-    <a href="{{ url('/') }}" class="cust-nav-brand">
-        <img src="{{ asset('logohunny.webp') }}" alt="Hunny Logo">
-        <span>Hunny Pet Care</span>
-    </a>
-    <div class="cust-nav-right">
-        <a href="{{ url('/') }}" class="cust-nav-tab {{ request()->is('/') ? 'active' : '' }}">
-            <i class="fas fa-home"></i> Beranda
+    <div class="cust-nav-inner">
+        <a href="{{ url('/') }}" class="cust-nav-brand">
+            <img src="{{ asset('logohunny.webp') }}" alt="Hunny Logo">
+            <span>Hunny Pet Care</span>
         </a>
-        <a href="{{ url('/pesanan-saya') }}" class="cust-nav-tab {{ request()->is('pesanan-saya') ? 'active' : '' }}">
-            <i class="fas fa-box"></i> Pesanan Saya
-        </a>
-        <a href="{{ route('preferensi.index') }}" class="cust-nav-tab {{ request()->is('preferensi') ? 'active' : '' }}">
-            <i class="fas fa-cog"></i> Preferensi
-        </a>
-        <button id="themeToggleBtn" class="cust-nav-tab" type="button">
-            <i class="fas fa-moon"></i> Tema
-        </button>
-        <button class="cart-btn" onclick="openCart()">
-            <i class="fas fa-shopping-bag"></i> Keranjang
-            <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
-        </button>
+        <div class="cust-nav-right">
+            <a href="{{ url('/') }}" class="cust-nav-tab {{ request()->routeIs('beranda') ? 'active' : '' }}">
+                <i class="fas fa-home"></i> Beranda
+            </a>
+            <a href="{{ route('shop.index') }}" class="cust-nav-tab {{ request()->routeIs('shop.index') ? 'active' : '' }}">
+                <i class="fas fa-shopping-bag"></i> Belanja Produk
+            </a>
+            <a href="{{ route('booking.create') }}" class="cust-nav-tab {{ request()->routeIs('booking.create') ? 'active' : '' }}">
+                <i class="fas fa-calendar-plus"></i> Booking Jasa Grooming
+            </a>
+            <a href="{{ route('pesanan.saya') }}" class="cust-nav-tab {{ request()->routeIs('pesanan.saya') ? 'active' : '' }}">
+                <i class="fas fa-box"></i> Pesanan Saya
+            </a>
+            <a href="{{ route('booking.index') }}" class="cust-nav-tab {{ request()->routeIs('booking.index') ? 'active' : '' }}">
+                <i class="fas fa-calendar-check"></i> Reservasi Saya
+            </a>
+        </div>
     </div>
 </nav>
 

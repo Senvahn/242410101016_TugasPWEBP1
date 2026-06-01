@@ -57,12 +57,33 @@
             {{-- Jenis Layanan --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Layanan <span class="text-red-500">*</span></label>
-                <select name="jenis_layanan"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    @foreach(['Basic Grooming','Full Grooming','Spa & Treatment','Nail Trimming'] as $layanan)
-                        <option value="{{ $layanan }}" {{ old('jenis_layanan', $booking->jenis_layanan) == $layanan ? 'selected' : '' }}>{{ $layanan }}</option>
+                <select name="service_id"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 @error('service_id') border-red-400 @enderror">
+                    <option value="">-- Pilih Layanan --</option>
+                    @foreach($services as $service)
+                        <option value="{{ $service->id }}" {{ old('service_id', $booking->service_id) == $service->id ? 'selected' : '' }}>
+                            {{ $service->name }} - Rp {{ number_format($service->price, 0, ',', '.') }}
+                        </option>
                     @endforeach
                 </select>
+                @error('service_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Pilihan Jam --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Pilihan Jam <span class="text-red-500">*</span></label>
+                <select name="pilihan_jam"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 @error('pilihan_jam') border-red-400 @enderror">
+                    @foreach(range(8, 17) as $jam)
+                        @php($hour = sprintf('%02d:00', $jam))
+                        <option value="{{ $hour }}" {{ old('pilihan_jam', $booking->pilihan_jam) == $hour ? 'selected' : '' }}>{{ $hour }}</option>
+                    @endforeach
+                </select>
+                @error('pilihan_jam')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Tanggal Reservasi --}}
@@ -70,7 +91,10 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Reservasi <span class="text-red-500">*</span></label>
                 <input type="date" name="tanggal_reservasi"
                        value="{{ old('tanggal_reservasi', \Carbon\Carbon::parse($booking->tanggal_reservasi)->format('Y-m-d')) }}"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 @error('tanggal_reservasi') border-red-400 @enderror">
+                @error('tanggal_reservasi')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Status --}}

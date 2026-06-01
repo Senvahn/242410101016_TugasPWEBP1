@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -20,7 +21,13 @@ class OrderController extends Controller
             'email' => 'nullable|email|max:190',
             'qty' => 'required|integer|min:1',
             'note' => 'nullable|string|max:500',
+            'payment_proof' => 'nullable|image|max:2048',
         ]);
+
+        $paymentProofPath = null;
+        if ($request->hasFile('payment_proof') && $request->file('payment_proof')->isValid()) {
+            $paymentProofPath = $request->file('payment_proof')->store('payment_proofs', 'public');
+        }
 
         $product = Produk::findOrFail($data['produk_id']);
         $items = [
@@ -46,6 +53,7 @@ class OrderController extends Controller
             'status' => 'pending',
             'note' => $data['note'] ?? null,
             'items' => $items,
+            'payment_proof_path' => $paymentProofPath,
         ]);
 
         return response()->json([
@@ -68,19 +76,34 @@ class OrderController extends Controller
 
     public function processCheckout(Request $request)
     {
-        $data = $request->validate([
+        $paymentMethod = $request->input('payment_method');
+
+        $rules = [
             'nama_pemesan' => 'required|string|max:190',
             'telepon' => 'nullable|string|max:30',
             'email' => 'nullable|email|max:190',
-            'payment_method' => 'required|in:Cash,QRIS,E-Wallet',
+            'payment_method' => 'required|in:bayar_di_toko,qris,e_wallet,Cash,QRIS,E-Wallet',
             'note' => 'nullable|string|max:500',
+            'payment_proof' => 'nullable|image|max:2048',
             'items' => 'required|array|min:1',
             'items.*.produk_id' => 'required|exists:produks,id',
             'items.*.qty' => 'required|integer|min:1',
-        ]);
+        ];
+
+        if (in_array($paymentMethod, ['qris', 'e_wallet'], true)) {
+            $rules['payment_proof'] = 'required|image|max:2048';
+        }
+
+        $data = $request->validate($rules);
 
         $items = [];
         $total = 0;
+        $paymentProofPath = null;
+
+        if ($request->hasFile('payment_proof') && $request->file('payment_proof')->isValid()) {
+            $paymentProofPath = $request->file('payment_proof')->store('payment_proofs', 'public');
+        }
+
         foreach ($data['items'] as $item) {
             $product = Produk::findOrFail($item['produk_id']);
             $qty = max(1, intval($item['qty']));
@@ -108,6 +131,7 @@ class OrderController extends Controller
             'status' => 'pending',
             'note' => $data['note'] ?? null,
             'items' => $items,
+            'payment_proof_path' => $paymentProofPath,
         ]);
 
         return response()->json([
@@ -126,6 +150,47 @@ class OrderController extends Controller
         return view('pesanan-saya');
     }
 
+    private function normalizeItems(Order $order): array
+    {
+        $items = is_array($order->items) ? $order->items : [];
+        $product = $order->relationLoaded('produk') ? $order->produk : $order->produk()->first();
+
+        if (!is_array($items) || empty($items)) {
+            $qty = max(1, (int) ($order->qty ?? 1));
+            $unitPrice = (float) ($product?->harga_beli ?? 0);
+
+            return [[
+                'id' => $product?->id ?? null,
+                'produk_id' => $product?->id ?? null,
+                'name' => $product?->nama_barang ?? 'Produk',
+                'nama_barang' => $product?->nama_barang ?? 'Produk',
+                'qty' => $qty,
+                'price' => $unitPrice,
+                'unit_price' => $unitPrice,
+                'subtotal' => $qty * $unitPrice,
+                'sub_total' => $qty * $unitPrice,
+            ]];
+        }
+
+        return array_values(array_map(function (array $item) use ($product) {
+            $qty = max(1, (int) ($item['qty'] ?? $item['quantity'] ?? 1));
+            $unitPrice = (float) ($item['price'] ?? $item['unit_price'] ?? $item['harga_beli'] ?? $product?->harga_beli ?? 0);
+            $subtotal = (float) ($item['subtotal'] ?? $item['sub_total'] ?? ($qty * $unitPrice));
+
+            return [
+                'id' => $item['id'] ?? $item['produk_id'] ?? $product?->id ?? null,
+                'produk_id' => $item['produk_id'] ?? $product?->id ?? null,
+                'name' => $item['name'] ?? $item['nama_barang'] ?? $product?->nama_barang ?? 'Produk',
+                'nama_barang' => $item['nama_barang'] ?? $item['name'] ?? $product?->nama_barang ?? 'Produk',
+                'qty' => $qty,
+                'price' => $unitPrice,
+                'unit_price' => $unitPrice,
+                'subtotal' => $subtotal,
+                'sub_total' => $subtotal,
+            ];
+        }, $items));
+    }
+
     public function search(Request $request)
     {
         $request->validate([
@@ -133,7 +198,7 @@ class OrderController extends Controller
         ]);
 
         $query = trim($request->input('query', ''));
-        $orders = Order::query();
+        $orders = Order::query()->with('produk');
 
         if (Auth::check() && !Auth::user()->isAdmin()) {
             $orders->where('user_id', Auth::id());
@@ -170,9 +235,41 @@ class OrderController extends Controller
                     'total' => $order->total,
                     'status' => $order->status,
                     'created_at' => $order->created_at->format('d M Y H:i'),
-                    'items' => $order->items ?? [],
+                    'items' => $this->normalizeItems($order),
                 ];
             }),
+        ]);
+    }
+
+    public function detail(Order $order)
+    {
+        $order->loadMissing('produk');
+
+        // Authorization: user bisa lihat order miliknya, admin bisa lihat semua, atau guest bisa lihat dengan verifikasi
+        if (Auth::check()) {
+            // Jika login: hanya bisa lihat miliknya sendiri atau admin
+            if (Auth::id() !== $order->user_id && !Auth::user()->isAdmin()) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+        }
+        // Jika guest: bisa lihat detail pesanan (verifikasi dilakukan di search)
+
+        return response()->json([
+            'data' => [
+                'id' => $order->id,
+                'order_code' => $order->order_code,
+                'nama_pemesan' => $order->nama_pemesan,
+                'telepon' => $order->telepon,
+                'email' => $order->email,
+                'payment_method' => $order->payment_method,
+                'payment_proof_path' => $order->payment_proof_path,
+                'total' => $order->total,
+                'status' => $order->status,
+                'note' => $order->note,
+                'created_at' => $order->created_at->toDateTimeString(),
+                'updated_at' => $order->updated_at->toDateTimeString(),
+                'items' => $this->normalizeItems($order),
+            ],
         ]);
     }
 
@@ -191,7 +288,74 @@ class OrderController extends Controller
             'status' => 'required|in:pending,confirmed,cancelled',
         ]);
 
-        $order->update(['status' => $data['status']]);
+        $items = is_array($order->items) ? $order->items : json_decode($order->items, true);
+        $items = is_array($items) ? $items : [];
+
+        if ($data['status'] === 'confirmed' && $order->status !== 'confirmed') {
+            DB::beginTransaction();
+            try {
+                foreach ($items as $item) {
+                    $product = Produk::find($item['produk_id']);
+                    $qty = max(1, intval($item['qty'] ?? 0));
+
+                    if (! $product) {
+                        DB::rollBack();
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Produk pesanan tidak ditemukan.',
+                        ], 404);
+                    }
+
+                    if ($product->jumlah < $qty) {
+                        DB::rollBack();
+                        return response()->json([
+                            'success' => false,
+                            'message' => "Stok produk {$product->nama_barang} tidak mencukupi.",
+                        ], 422);
+                    }
+
+                    $product->decrement('jumlah', $qty);
+                }
+
+                $order->update(['status' => 'confirmed']);
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui status pesanan.',
+                ], 500);
+            }
+        } elseif ($data['status'] === 'cancelled' && $order->status === 'confirmed') {
+            DB::beginTransaction();
+            try {
+                foreach ($items as $item) {
+                    $product = Produk::find($item['produk_id']);
+                    $qty = max(1, intval($item['qty'] ?? 0));
+
+                    if (! $product) {
+                        DB::rollBack();
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Produk pesanan tidak ditemukan.',
+                        ], 404);
+                    }
+
+                    $product->increment('jumlah', $qty);
+                }
+
+                $order->update(['status' => 'cancelled']);
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui status pesanan.',
+                ], 500);
+            }
+        } else {
+            $order->update(['status' => $data['status']]);
+        }
 
         return response()->json([
             'success' => true,

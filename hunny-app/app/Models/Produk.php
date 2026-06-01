@@ -17,6 +17,7 @@ class Produk extends Model
         'satuan',
         'harga_beli',
         'supplier_id',
+        'foto_produk',
         'status_tersedia', 
         'tanggal_masuk',
     ];

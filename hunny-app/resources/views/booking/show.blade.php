@@ -1,80 +1,62 @@
 @extends('layouts.app')
 
+@section('title', 'Detail Reservasi - Hunny Pet Care')
+
 @section('content')
-<div class="max-w-2xl mx-auto px-4 py-8">
-    <div class="mb-6">
-        <a href="{{ route('booking.index') }}" class="text-pink-500 hover:underline text-sm">← Kembali ke Daftar</a>
-        <h1 class="text-2xl font-bold text-gray-800 mt-1">🐾 Detail Reservasi</h1>
-    </div>
-
-    <div class="bg-white rounded-xl shadow overflow-hidden">
-        {{-- Header Card --}}
-        <div class="bg-gradient-to-r from-pink-400 to-rose-400 px-6 py-5 flex items-center gap-4">
-            @if($booking->foto_hewan)
-                <img src="{{ asset('storage/' . $booking->foto_hewan) }}"
-                     class="w-16 h-16 rounded-full object-cover border-2 border-white shadow">
-            @else
-                <div class="w-16 h-16 rounded-full bg-white/30 flex items-center justify-center text-3xl">🐶</div>
-            @endif
-            <div>
-                <p class="font-mono text-white/80 text-sm">{{ $booking->kode_booking }}</p>
-                <h2 class="text-xl font-bold text-white">{{ $booking->nama_hewan }}</h2>
-                <p class="text-white/80 text-sm">{{ $booking->jenis_hewan }}</p>
-            </div>
-        </div>
-
-        {{-- Detail Info --}}
-        <div class="p-6 space-y-4">
-            @php
-                $fields = [
-                    '👤 Nama Pemilik' => $booking->nama_pemilik,
-                    '📧 Email'        => $booking->email,
-                    '✂️ Layanan'      => $booking->jenis_layanan,
-                    '📅 Tanggal'      => \Carbon\Carbon::parse($booking->tanggal_reservasi)->translatedFormat('d F Y'),
-                ];
-                $statusColor = [
-                    'pending'   => 'bg-yellow-100 text-yellow-700',
-                    'confirmed' => 'bg-blue-100 text-blue-700',
-                    'done'      => 'bg-green-100 text-green-700',
-                    'cancelled' => 'bg-red-100 text-red-700',
-                ][$booking->status] ?? '';
-            @endphp
-
-            @foreach($fields as $label => $value)
-            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-500">{{ $label }}</span>
-                <span class="text-sm font-medium text-gray-800">{{ $value }}</span>
-            </div>
-            @endforeach
-
-            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                <span class="text-sm text-gray-500">🏷️ Status</span>
-                <span class="px-3 py-1 rounded-full text-xs font-medium {{ $statusColor }}">{{ ucfirst($booking->status) }}</span>
+<div class="w-full min-h-screen bg-[#f9f7f4] py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-sm border border-[#e8dcc8] overflow-hidden">
+            
+            <!-- Header -->
+            <div class="p-6 bg-[#f9f7f4] border-b border-[#e8dcc8] flex items-start justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-[#3d2817] flex items-center gap-2">
+                        🐾 Detail Reservasi
+                    </h1>
+                    <p class="text-xs text-gray-500 mt-2">Kode: <span class="font-mono font-bold text-[#8b6f47]">{{ $booking->kode_booking ?? $booking->id }}</span></p>
+                </div>
+                <a href="{{ route('booking.index') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:opacity-80" style="background:#e8dcc8;color:#3d2817">
+                    ← Kembali ke Daftar Reservasi Grooming
+                </a>
             </div>
 
-            @if($booking->catatan)
-            <div class="py-2">
-                <p class="text-sm text-gray-500 mb-1">📝 Catatan</p>
-                <p class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">{{ $booking->catatan }}</p>
-            </div>
-            @endif
-        </div>
+            <!-- Konten -->
+            <div class="p-8 space-y-4">
+                
+                <!-- Nama & Jenis Hewan -->
+                <div class="flex justify-between items-center py-3 px-4 bg-[#fefdfb] rounded-lg border border-[#e8dcc8]/50">
+                    <span class="text-sm font-medium text-[#6b5637]">Nama Hewan</span>
+                    <span class="text-sm font-semibold text-[#3d2817]">{{ $booking->nama_hewan }} - {{ $booking->jenis_hewan }}</span>
+                </div>
 
-        {{-- Actions --}}
-        <div class="px-6 pb-6 flex gap-3">
-            <a href="{{ route('booking.edit', $booking) }}"
-               class="bg-yellow-400 hover:bg-yellow-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
-                ✏️ Edit
-            </a>
-            <form action="{{ route('booking.destroy', $booking) }}" method="POST"
-                  onsubmit="return confirm('Yakin ingin menghapus reservasi {{ $booking->kode_booking }}?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                        class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg text-sm font-medium transition">
-                    🗑️ Hapus
-                </button>
-            </form>
+                <!-- Jasa Layanan -->
+                <div class="flex justify-between items-center py-3 px-4 bg-[#fefdfb] rounded-lg border border-[#e8dcc8]/50">
+                    <span class="text-sm font-medium text-[#6b5637]">Jasa Layanan</span>
+                    <span class="text-sm font-semibold text-[#3d2817]">{{ $booking->service->name ?? 'Layanan' }}</span>
+                </div>
+
+                <!-- Waktu Reservasi -->
+                <div class="flex justify-between items-center py-3 px-4 bg-[#fefdfb] rounded-lg border border-[#e8dcc8]/50">
+                    <span class="text-sm font-medium text-[#6b5637]">Tanggal & Jam</span>
+                    <span class="text-sm font-semibold text-[#3d2817]">{{ \Carbon\Carbon::parse($booking->tanggal_reservasi)->translatedFormat('d M Y') }} • {{ $booking->pilihan_jam }}</span>
+                </div>
+
+                <!-- Harga Layanan -->
+                <div class="flex justify-between items-center py-3 px-4 bg-[#fefdfb] rounded-lg border border-[#e8dcc8]/50">
+                    <span class="text-sm font-medium text-[#6b5637]">Harga Layanan</span>
+                    <span class="text-sm font-semibold text-[#3d2817]">Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}</span>
+                </div>
+
+                <!-- Status -->
+                <div class="flex justify-between items-center py-3 px-4 bg-[#fefdfb] rounded-lg border border-[#e8dcc8]/50">
+                    <span class="text-sm font-medium text-[#6b5637]">Status</span>
+                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                        {{ ucfirst($booking->status) }}
+                    </span>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>

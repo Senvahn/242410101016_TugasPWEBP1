@@ -70,7 +70,7 @@
 @section('content')
 <section class="about-hero">
     <h1>Tentang Hunny Pet Care</h1>
-    <p>Platform manajemen layanan hewan peliharaan yang menggabungkan kenyamanan, kualitas, dan kepedulian untuk setiap anabul.</p>
+    <p>Platform layanan hewan peliharaan yang menggabungkan kenyamanan, kualitas, dan kepedulian untuk setiap anabul.</p>
 </section>
 
 <div class="about-body">

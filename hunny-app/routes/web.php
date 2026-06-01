@@ -14,11 +14,18 @@ Route::get('/shop', function(){
     return view('shop.index', compact('produks'));
 })->name('shop.index');
 
+// Landing page setelah login
+Route::get('/landing-page', [App\Http\Controllers\LandingPageController::class, 'show'])
+    ->middleware('auth')
+    ->name('landing-page');
+
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/checkout', [OrderController::class, 'processCheckout'])->name('checkout.process');
 Route::get('/orders/search', [OrderController::class, 'search'])->name('orders.search');
+Route::get('/orders/{order}', [OrderController::class, 'detail'])->name('orders.detail');
 Route::get('/pesanan-saya', [OrderController::class, 'historyPage'])->name('pesanan.saya');
+Route::view('/debug-orders', 'debug-orders')->name('debug.orders');
 Route::view('/kontak', 'kontak')->name('kontak');
 Route::redirect('/pembayaran', '/checkout');
 Route::view('/tentang', 'tentang')->name('tentang');
@@ -38,6 +45,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('booking', BookingController::class)
          ->only(['index', 'create', 'store', 'show']);
 
+        Route::get('/booking/{booking}/checkout', [BookingController::class, 'checkout'])
+            ->name('booking.checkout');
+        Route::post('/booking/{booking}/checkout', [BookingController::class, 'processPayment'])
+            ->name('booking.checkout.process');
+
     // Admin only: bisa edit, update, hapus
     Route::resource('booking', BookingController::class)
          ->only(['edit', 'update', 'destroy'])
@@ -47,11 +59,23 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/stok', [\App\Http\Controllers\AdminProdukController::class, 'index'])->name('admin.stok');
         Route::get('/admin/input', [\App\Http\Controllers\AdminProdukController::class, 'create'])->name('admin.input');
         Route::post('/admin/produk', [\App\Http\Controllers\AdminProdukController::class, 'store'])->name('admin.produk.store');
+        Route::get('/admin/produk/{produk}/edit', [\App\Http\Controllers\AdminProdukController::class, 'edit'])->name('admin.produk.edit');
+        Route::put('/admin/produk/{produk}', [\App\Http\Controllers\AdminProdukController::class, 'update'])->name('admin.produk.update');
         Route::delete('/admin/produk/{produk}', [\App\Http\Controllers\AdminProdukController::class, 'destroy'])->name('admin.produk.destroy');
+        Route::put('/admin/produk/{produk}/restore', [\App\Http\Controllers\AdminProdukController::class, 'restore'])->name('admin.produk.restore');
 
         Route::get('/admin/konfirmasi', [OrderController::class, 'adminIndex'])->name('admin.konfirmasi');
         Route::post('/admin/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.status');
         Route::get('/admin/reservasi', [BookingController::class, 'index'])->name('admin.reservasi');
+        Route::post('/admin/booking/{booking}/status', [BookingController::class, 'updateStatus'])->name('admin.booking.status');
+
+        Route::get('/admin/services', [\App\Http\Controllers\AdminServiceController::class, 'index'])->name('admin.services.index');
+        Route::get('/admin/services/create', [\App\Http\Controllers\AdminServiceController::class, 'create'])->name('admin.services.create');
+        Route::post('/admin/services', [\App\Http\Controllers\AdminServiceController::class, 'store'])->name('admin.services.store');
+        Route::get('/admin/services/{service}/edit', [\App\Http\Controllers\AdminServiceController::class, 'edit'])->name('admin.services.edit');
+        Route::put('/admin/services/{service}', [\App\Http\Controllers\AdminServiceController::class, 'update'])->name('admin.services.update');
+        Route::delete('/admin/services/{service}', [\App\Http\Controllers\AdminServiceController::class, 'destroy'])->name('admin.services.destroy');
+        Route::put('/admin/services/{service}/restore', [\App\Http\Controllers\AdminServiceController::class, 'restore'])->name('admin.services.restore');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
